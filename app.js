@@ -18,3 +18,10 @@ skipBtn.addEventListener("click", () => {
 loginSkip.addEventListener("click", () => {
   window.location.replace("./dashboard.html");
 });
+window.onload = () => {
+  let title = document.getElementById("title");
+  console.log("title", title);
+};
+function addingName() {
+  title.innerHTML = `${nameofuser.name}`;
+}

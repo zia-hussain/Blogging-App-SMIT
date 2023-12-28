@@ -133,6 +133,10 @@
         getDatabase,
         set,
         ref,
+        child,
+        get,
+        update,
+        remove,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
       import {
         getAuth,
@@ -156,14 +160,44 @@
       const auth = getAuth(app);
       const dbref = ref(db);
       const provider = new FacebookAuthProvider();
-
+      let username = document.getElementById("username");
       let signInForm = document.getElementById("signin-btn");
       let signUpForm = document.querySelector(".sign-up-form");
 
+   // ... (previous code)
+
+let addData = () => {
+  // Assume user is authenticated and you have user.uid defined
+  const user = auth.currentUser;
+
+  set(ref(db, "UsersUid/" + user.uid), {
+    nameofuser: { name: username.value },
+    uid: user.uid,
+  })
+    .then(() => {
+      alert("Data Saved in firebase database");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+signUpForm.addEventListener("submit", addData);
+
+let RetData = () => {
+  const user = auth.currentUser;
+  const dbRef = ref(db, "UsersUid/" + user.uid);
+  get(dbRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      username.value = snapshot.val().nameofuser.name;
+    } else {
+      alert('Employee Does Not Exist');
+    }
+  });
+};
+   
       let registerUser = (e) => {
         e.preventDefault();
 
-        let username = document.getElementById("username");
         let signupEmail = document.getElementById("signup-email");
         let signupPass = document.getElementById("signup-password");
 
@@ -200,6 +234,7 @@
           });
       };
       signInForm.addEventListener("click", SignInUser);
+
       let fbbc = () => {
         signInWithPopup(auth, provider)
           .then((result) => {
@@ -214,12 +249,14 @@
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            const email = error.customData.email;
+            const emaill = error.customData.email;
             const credential = FacebookAuthProvider.credentialFromError(error);
             console.log(error);
+            console.log(errorCode, errorMessage, emaill);
           });
       };
       fb.addEventListener("click", fbbc);
+
     </script>
 
     <script src="app.js"></script>
