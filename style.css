@@ -128,7 +128,8 @@ form.sign-in-form {
 }
 
 .social-icon:hover {
-  color: #4481eb;
+  color: #fff;
+  background-color: #4481eb;
   border-color: #4481eb;
 }
 
@@ -208,12 +209,14 @@ form.sign-in-form {
 .panel h3 {
   font-weight: 600;
   line-height: 1;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
 }
 
 .panel p {
   font-size: 0.95rem;
   padding: 0.7rem 0;
+  font-weight: 100;
+  line-height: 25px;
 }
 
 .btn.transparent {
@@ -224,6 +227,7 @@ form.sign-in-form {
   height: 41px;
   font-weight: 600;
   font-size: 0.8rem;
+  margin-top: 10px;
 }
 .btn.transparent:hover {
   background: #fff;
@@ -237,7 +241,7 @@ form.sign-in-form {
 
 /* ANIMATION */
 
-.container.sign-up-mode:before {
+.container.sign-up-mode::before {
   transform: translate(100%, -50%);
   right: 52%;
 }
@@ -272,6 +276,13 @@ form.sign-in-form {
 
 .container.sign-up-mode .right-panel {
   pointer-events: all;
+}
+
+#skip,
+#l-skip {
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 @media (max-width: 870px) {
@@ -387,6 +398,12 @@ form.sign-in-form {
   }
   .panel .content {
     padding: 0.5rem 1rem;
+  }
+  .panel p {
+    line-height: normal;
+  }
+  .btn.transparent {
+    margin-top: 0;
   }
   .container {
     padding: 1.5rem;

@@ -14,45 +14,6 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form autocomplete="off" action="#" class="sign-in-form">
-            <h2 class="title">Sign in</h2>
-            <div class="input-field">
-              <i class="fas fa-envelope"></i>
-              <input
-                id="email"
-                type="email"
-                placeholder="Email"
-                autocomplete="false"
-              />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                autocomplete="off"
-              />
-            </div>
-            <button id="signin-btn" type="submit" class="btn solid">
-              Login
-            </button>
-            <p class="social-text">Or Sign in with social platforms</p>
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-twitter"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-            </div>
-          </form>
           <form action="#" class="sign-up-form">
             <h2 class="title">Sign up</h2>
             <div class="input-field">
@@ -78,6 +39,7 @@
               />
             </div>
             <button id="signup-btn" type="submit" class="btn">Sign UP</button>
+            <a id="skip">Skip for now</a>
             <p class="social-text">Or Sign up with social platforms</p>
             <div class="social-media">
               <a href="#" class="social-icon">
@@ -90,6 +52,37 @@
                 <i class="fab fa-google"></i>
               </a>
               <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+          <form action="#" class="sign-in-form">
+            <h2 class="title">Sign in</h2>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input id="email" type="email" placeholder="Email" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input id="password" type="password" placeholder="Password" />
+            </div>
+            <button id="signin-btn" type="submit" class="btn solid">
+              Login
+            </button>
+            <a id="l-skip">Skip for now</a>
+
+            <p class="social-text">Or Sign in with social platforms</p>
+            <div class="social-media">
+              <a id="fb" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" id="twitter" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" id="google" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" id="linkedin" class="social-icon">
                 <i class="fab fa-linkedin-in"></i>
               </a>
             </div>
@@ -127,6 +120,14 @@
       </div>
     </div>
     <script type="module">
+      const sign_in_btn = document.querySelector("#sign-in-btn");
+      const sign_up_btn = document.querySelector("#sign-up-btn");
+      const container = document.querySelector(".container");
+      const fb = document.getElementById("fb");
+      const tw = document.getElementById("twitter");
+      const gl = document.getElementById("google");
+      const ln = document.getElementById("linkedin");
+
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import {
         getDatabase,
@@ -137,6 +138,8 @@
         getAuth,
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword,
+        FacebookAuthProvider,
+        signInWithPopup,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
       const firebaseConfig = {
@@ -152,6 +155,7 @@
       const db = getDatabase();
       const auth = getAuth(app);
       const dbref = ref(db);
+      const provider = new FacebookAuthProvider();
 
       let signInForm = document.getElementById("signin-btn");
       let signUpForm = document.querySelector(".sign-up-form");
@@ -170,6 +174,8 @@
         )
           .then((credential) => {
             console.log(credential);
+            alert("You're now one of us!");
+            container.classList.remove("sign-up-mode");
           })
           .catch((error) => {
             alert(error.message);
@@ -186,6 +192,7 @@
         signInWithEmailAndPassword(auth, email.value, password.value)
           .then((credential) => {
             console.log(credential);
+
             window.location.replace("./dashboard.html");
           })
           .catch((error) => {
@@ -193,6 +200,26 @@
           });
       };
       signInForm.addEventListener("click", SignInUser);
+      let fbbc = () => {
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+
+            const credential =
+              FacebookAuthProvider.credentialFromResult(result);
+            const accessToken = credential.accessToken;
+            console.log(accessToken);
+            alert(`Welcome ${user.displayName}`);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+            const credential = FacebookAuthProvider.credentialFromError(error);
+            console.log(error);
+          });
+      };
+      fb.addEventListener("click", fbbc);
     </script>
 
     <script src="app.js"></script>
