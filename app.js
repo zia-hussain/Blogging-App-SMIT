@@ -12,10 +12,10 @@ sign_in_btn.addEventListener("click", () => {
   container.classList.remove("sign-up-mode");
 });
 skipBtn.addEventListener("click", () => {
-  //   alert("hello");
   container.classList.remove("sign-up-mode");
 });
 loginSkip.addEventListener("click", () => {
+  localStorage.removeItem("Uid");
   window.location.replace("./dashboard.html");
 });
 window.onload = () => {
@@ -25,3 +25,135 @@ window.onload = () => {
 function addingName() {
   title.innerHTML = `${nameofuser.name}`;
 }
+
+//   +++++++++++++++++++++++++++++++++++++++++
+
+let username = document.getElementById("username");
+let signInForm = document.getElementById("signin-btn");
+let signUpForm = document.querySelector(".sign-up-form");
+const fb = document.getElementById("fb");
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getDatabase,
+  set,
+  ref,
+  child,
+  get,
+  update,
+  remove,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBlpLk8NjMNvY3aFWvzTLp9uX_wVOX4TRY",
+  authDomain: "auth-blog-app-assignment.firebaseapp.com",
+  projectId: "auth-blog-app-assignment",
+  storageBucket: "auth-blog-app-assignment.appspot.com",
+  messagingSenderId: "939311478935",
+  appId: "1:939311478935:web:dc29fa6e41142a622651d2",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase();
+const auth = getAuth(app);
+const dbref = ref(db);
+const provider = new FacebookAuthProvider();
+
+let addData = () => {
+  // Assume user is authenticated and you have user.uid defined
+  const user = auth.currentUser;
+
+  set(ref(db, "UsersUid/" + user.uid), {
+    nameofuser: username.value,
+    uid: user.uid,
+  })
+    .then(() => {
+      alert("Data Saved in firebase database");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+let RetData = () => {
+  const user = auth.currentUser;
+  const dbRef = ref(db, "UsersUid/" + user.uid);
+  get(dbRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      username.value = snapshot.val().nameofuser.name;
+    } else {
+      alert("Employee Does Not Exist");
+    }
+  });
+};
+
+let registerUser = (e) => {
+  e.preventDefault();
+
+  let signupEmail = document.getElementById("signup-email");
+  let signupPass = document.getElementById("signup-password");
+
+  createUserWithEmailAndPassword(auth, signupEmail.value, signupPass.value)
+    .then((credential) => {
+      console.log(credential);
+      addData();
+      alert("You're now one of us!");
+      container.classList.remove("sign-up-mode");
+      signupEmail.value = "";
+      signupPass.value = "";
+      username.value = "";
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+};
+signUpForm.addEventListener("submit", registerUser);
+
+let SignInUser = (e) => {
+  e.preventDefault();
+
+  let email = document.getElementById("email");
+  let password = document.getElementById("password");
+
+  signInWithEmailAndPassword(auth, email.value, password.value)
+    .then((credential) => {
+      console.log(credential);
+      localStorage.setItem("Uid", credential.user.uid);
+
+      window.open("./dashboard.html", "_blank");
+      email.value = "";
+      password.value = "";
+    })
+    .catch((error) => {
+      alert("Please Insert Correct Credential");
+    });
+};
+signInForm.addEventListener("click", SignInUser);
+
+let fbbc = () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+
+      const credential = FacebookAuthProvider.credentialFromResult(result);
+      const accessToken = credential.accessToken;
+      console.log(accessToken);
+      alert(`Welcome ${user.displayName}`);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const emaill = error.customData.email;
+      const credential = FacebookAuthProvider.credentialFromError(error);
+      console.log(error);
+      console.log(errorCode, errorMessage, emaill);
+    });
+};
+fb.addEventListener("click", fbbc);
