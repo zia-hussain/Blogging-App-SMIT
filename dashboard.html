@@ -4,11 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DashBoard</title>
+    <link rel="stylesheet" href="dasboard.css" />
   </head>
   <body>
-    <h1>Dashboard</h1>
-    <span id="title" onclick="addingName()" href="#"></span>
+    <section class="wrapper">
+      <div class="container">
+        <nav class="nav">
+          <div class="nav-left">
+            <h1>DashBoard</h1>
+          </div>
+          <div class="nav-right">
+            <ul id="items">
+              
+            </ul>
+            <button class="show">Logout</button>
+          </div>
+        </nav>
+      </div>
+    </section>
 
-    <script src="app.js"></script>
+    <script type="module" src="dashborad.js"></script>
   </body>
 </html>
