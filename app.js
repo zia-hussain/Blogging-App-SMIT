@@ -16,15 +16,8 @@ skipBtn.addEventListener("click", () => {
 });
 loginSkip.addEventListener("click", () => {
   localStorage.removeItem("Uid");
-  window.location.replace("./dashboard.html");
+  window.location.replace("../Dashboard/dashboard.html");
 });
-window.onload = () => {
-  let title = document.getElementById("title");
-  console.log("title", title);
-};
-function addingName() {
-  title.innerHTML = `${nameofuser.name}`;
-}
 
 //   +++++++++++++++++++++++++++++++++++++++++
 
@@ -127,12 +120,13 @@ let SignInUser = (e) => {
       console.log(credential);
       localStorage.setItem("Uid", credential.user.uid);
 
-      window.open("./dashboard.html", "_blank");
+      window.open("../Dashboard/dashboard.html", "_blank");
       email.value = "";
       password.value = "";
     })
     .catch((error) => {
       alert("Please Insert Correct Credential");
+      console.log(error)
     });
 };
 signInForm.addEventListener("click", SignInUser);
