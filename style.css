@@ -66,7 +66,7 @@ form.sign-in-form {
   margin-bottom: 10px;
 }
 
-.input-field {
+/* .input-field {
   max-width: 380px;
   width: 100%;
   background-color: #f0f0f0;
@@ -78,13 +78,68 @@ form.sign-in-form {
   padding: 0 0.4rem;
   position: relative;
 }
+.input-field span {
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translate(-50%,-35%);
+  cursor: pointer;
+  background: #000;
+}
 
-.input-field i {
+.input-field i{
   text-align: center;
   line-height: 55px;
   color: #acacac;
   transition: 0.5s;
   font-size: 1.1rem;
+  
+} */
+
+.input-field {
+  max-width: 380px;
+  width: 100%;
+  background-color: #f0f0f0;
+  margin: 10px 0;
+  height: 55px;
+  border-radius: 55px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.4rem;
+  position: relative;
+}
+
+.input-field input {
+  flex: 1;
+  border: none;
+  outline: none;
+}
+
+.input-field i {
+  color: #acacac;
+  margin-inline: 1rem;
+}
+
+.input-field span {
+  cursor: pointer;
+  padding: 0 1rem;
+  fill: #acacac;
+  transform: translate(-50, -50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.input-field span {
+  cursor: pointer;
+  padding: 0 1rem;
+  fill: #acacac;
+  transform: translate(-50, -50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
 }
 
 .input-field input {
@@ -129,13 +184,13 @@ form.sign-in-form {
 
 .social-icon:hover {
   color: #fff;
-  background-color: #4481eb;
-  border-color: #4481eb;
+  background-color: #012D3C;
+  border-color: #012D3C;
 }
 
 .btn {
   width: 150px;
-  background-color: #5995fd;
+  background-color: #012D3C;
   border: none;
   outline: none;
   height: 49px;
@@ -149,7 +204,7 @@ form.sign-in-form {
 }
 
 .btn:hover {
-  background-color: #4d84e2;
+  background-color: #012D3C;
 }
 .panels-container {
   position: absolute;
@@ -169,7 +224,11 @@ form.sign-in-form {
   top: -10%;
   right: 48%;
   transform: translateY(-50%);
-  background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
+  /* background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%); */
+  /* background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%); */
+  background-image: linear-gradient(-45deg, #000000 0%, #04befe 100%);
+
+
   transition: 1.8s ease-in-out;
   border-radius: 50%;
   z-index: 6;
@@ -231,7 +290,7 @@ form.sign-in-form {
 }
 .btn.transparent:hover {
   background: #fff;
-  color: #4481eb;
+  color: #012D3C;
 }
 
 .right-panel .image,
@@ -417,5 +476,10 @@ form.sign-in-form {
   .container.sign-up-mode:before {
     bottom: 28%;
     left: 50%;
+  }
+  .input-field span {
+    padding: 0 1rem;
+    /* background:rgba(0,0,0,0.5); */
+    margin-left: -10px;
   }
 }

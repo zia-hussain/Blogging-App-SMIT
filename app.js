@@ -131,7 +131,7 @@ let SignInUser = (e) => {
 };
 signInForm.addEventListener("click", SignInUser);
 
-let fbbc = () => {
+let fbbc = () => {  
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
