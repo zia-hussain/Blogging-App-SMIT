@@ -3,6 +3,15 @@ const sign_up_btn = document.querySelector("#sign-up-btn");
 const container = document.querySelector(".container");
 const skipBtn = document.getElementById("skip");
 const loginSkip = document.getElementById("l-skip");
+let forgot = document.getElementById("forgot");
+
+if (forgot) {
+  forgot.addEventListener("click", forgotPass);
+} else {
+  console.log("Element with ID 'forgot' not found.");
+}
+
+
 
 sign_up_btn.addEventListener("click", () => {
   container.classList.add("sign-up-mode");
@@ -42,6 +51,7 @@ import {
   signInWithEmailAndPassword,
   FacebookAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -119,19 +129,19 @@ let SignInUser = (e) => {
     .then((credential) => {
       console.log(credential);
       localStorage.setItem("Uid", credential.user.uid);
-
       window.open("../Dashboard/dashboard.html", "_blank");
       email.value = "";
       password.value = "";
     })
     .catch((error) => {
       alert("Please Insert Correct Credential");
-      console.log(error)
+      forgot.style.display = "block";
+      console.log(error);
     });
 };
 signInForm.addEventListener("click", SignInUser);
 
-let fbbc = () => {  
+let fbbc = () => {
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
@@ -151,3 +161,16 @@ let fbbc = () => {
     });
 };
 fb.addEventListener("click", fbbc);
+
+function forgotPass() {
+  console.log("first");
+  sendPasswordResetEmail(auth, email.value)
+    .then(() => {
+      alert("A Password Reset Link is Sent To Your Email");
+      password.value = ""
+    })
+    .catch((error) => {
+      console.log(error.message);
+      console.log(error.code);
+    });
+};

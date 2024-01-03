@@ -62,7 +62,7 @@ form.sign-in-form {
 
 .title {
   font-size: 2.2rem;
-  color: #444;
+  color: #012d3c;
   margin-bottom: 10px;
 }
 
@@ -124,22 +124,12 @@ form.sign-in-form {
   cursor: pointer;
   padding: 0 1rem;
   fill: #acacac;
-  transform: translate(-50, -50%);
+  transform: translate(-50%, 0);
   display: flex;
   align-items: center;
   height: 100%;
-  position: relative;
-}
-
-.input-field span {
-  cursor: pointer;
-  padding: 0 1rem;
-  fill: #acacac;
-  transform: translate(-50, -50%);
-  display: flex;
-  align-items: center;
-  height: 100%;
-  position: relative;
+  position: absolute;
+  right: -20px;
 }
 
 .input-field input {
@@ -156,41 +146,9 @@ form.sign-in-form {
   color: #aaa;
   font-weight: 500;
 }
-
-.social-text {
-  padding: 0.7rem 0;
-  font-size: 1rem;
-}
-
-.social-media {
-  display: flex;
-  justify-content: center;
-}
-
-.social-icon {
-  height: 46px;
-  width: 46px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 0.45rem;
-  color: #333;
-  border-radius: 50%;
-  border: 1px solid #333;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: 0.3s;
-}
-
-.social-icon:hover {
-  color: #fff;
-  background-color: #012D3C;
-  border-color: #012D3C;
-}
-
 .btn {
   width: 150px;
-  background-color: #012D3C;
+  background-color: #012d3c;
   border: none;
   outline: none;
   height: 49px;
@@ -198,13 +156,17 @@ form.sign-in-form {
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
-  margin: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
   cursor: pointer;
   transition: 0.5s;
+
 }
 
 .btn:hover {
-  background-color: #012D3C;
+  background-color: #fff;
+  color: #012d3c;
+  border: 1px solid #012d3c;
 }
 .panels-container {
   position: absolute;
@@ -226,8 +188,7 @@ form.sign-in-form {
   transform: translateY(-50%);
   /* background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%); */
   /* background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%); */
-  background-image: linear-gradient(-45deg, #000000 0%, #04befe 100%);
-
+  background-image: linear-gradient(-45deg, #012d3c 0%, #000 100%);
 
   transition: 1.8s ease-in-out;
   border-radius: 50%;
@@ -290,7 +251,7 @@ form.sign-in-form {
 }
 .btn.transparent:hover {
   background: #fff;
-  color: #012D3C;
+  color: #012d3c;
 }
 
 .right-panel .image,
@@ -339,11 +300,32 @@ form.sign-in-form {
 
 #skip,
 #l-skip {
-  text-decoration: underline;
+  /* text-decoration: underline; */
+  /* border-bottom: 1px solid #333; */
   font-size: 14px;
   cursor: pointer;
+  position: relative;
 }
-
+#l-skip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: #333;
+  transition: width 0.2s, transform 0.2s;
+  transform-origin: right;
+  transform: scaleX(0);
+}
+#l-skip:hover::after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+#forgot{
+  cursor: pointer;
+  display: none;
+}
 @media (max-width: 870px) {
   .container {
     min-height: 800px;
@@ -445,6 +427,7 @@ form.sign-in-form {
     top: 5%;
     transform: translate(-50%, 0);
   }
+
 }
 
 @media (max-width: 570px) {
