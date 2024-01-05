@@ -269,7 +269,10 @@ button:hover {
     transform: scale(1.25);
   }
 }
-@media (max-width: 1100px) {
+@media  (min-width: 901px) and (max-width: 1100px) {
+  .nav-left h1{
+    padding-inline: 5px;
+  }
   .nav{
     position: fixed;
     top: 0;
@@ -319,7 +322,7 @@ ul li::before{
 }
 
 
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
 
   .nav-right ul {
     /* display: none; */
