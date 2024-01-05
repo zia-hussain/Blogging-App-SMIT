@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DashBoard</title>
+
+    <!-- Swiper  -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
     <link rel="stylesheet" href="dasboard.css" />
     <link
       rel="stylesheet"
@@ -109,8 +116,67 @@
             </div>
           </div>
         </div>
+
+        <!---  Slider------->
+        <div class="main-container">
+          <div class="article-container swiper">
+            <div class="card-wrapper swiper-wrapper" >
+              <article class="article__card swiper-slide " data-swiper-autoplay="2000">
+                <figure class="article__image">
+                  <img src="profile.webp" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="profile.webp" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="profile.webp" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+              </article>
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+
+            <!-- If we need navigation buttons -->
+            <div id="prev-btn" class="swiper-button-prev"></div>
+            <div id="next-btn" class="swiper-button-next"></div>
+          </div>
+        </div>
+
+        <!----Slider Khatam----->
       </div>
     </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
       let loginBtn = document.querySelector(".if-login");
@@ -124,23 +190,21 @@
         window.location.replace("../index.html");
       }
 
-  
-function showmenu() {
-  if (window.innerWidth <= 900) {
-    show.style.display = "none";
-    items.style.left = "0";
-    hide.style.display = "block";
-  }
-}
+      function showmenu() {
+        if (window.innerWidth <= 1100) {
+          show.style.display = "none";
+          items.style.left = "0";
+          hide.style.display = "block";
+        }
+      }
 
-function closemenu() {
-  if (window.innerWidth <= 900) {
-    hide.style.display = "none";
-    items.style.left = "-25vh";
-    show.style.display = "block";
-  }
-}
-
+      function closemenu() {
+        if (window.innerWidth <= 1100) {
+          hide.style.display = "none";
+          items.style.left = "-35vh";
+          show.style.display = "block";
+        }
+      }
     </script>
 
     <script type="module" src="dashborad.js"></script>

@@ -22,15 +22,14 @@ let title = document.getElementById("title");
 let btn = document.getElementById("btn");
 let heroBtn = document.getElementById("h-btn");
 let ifLoginBtn = document.querySelectorAll(".if-login");
-let nav = document.querySelector('.nav')
-
+let nav = document.querySelector(".nav");
 
 const getData = () => {
   get(child(dbRef, `UsersUid/${id}`))
     .then((snapshot) => {
-      nav.classList.add('enlarged')
+      nav.classList.add("enlarged");
       if (snapshot.exists()) {
-        title.innerHTML = snapshot.val().nameofuser+ "";
+        title.innerHTML = snapshot.val().nameofuser + "";
         btn.innerHTML = "Logout";
         btn.style.display = "block";
         heroBtn.innerHTML = "My Profile";
@@ -38,25 +37,22 @@ const getData = () => {
         // ifLoginBtn.style.display = 'block';
 
         ifLoginBtn.forEach((element) => {
-          element.style.display = 'block';
+          element.style.display = "block";
         });
-
 
         console.log(snapshot.val());
       } else {
         console.log("No data available");
-        title.innerHTML = 'Guest'
+        title.innerHTML = "Guest";
         btn.innerHTML = "Login";
         btn.style.display = "block";
         heroBtn.innerHTML = "Be a Member !";
         heroBtn.style.display = "block";
         // ifLoginBtn.style.display = 'none';
 
-
         ifLoginBtn.forEach((element) => {
-          element.style.display = 'none';
+          element.style.display = "none";
         });
-
       }
     })
     .catch((error) => {
@@ -68,10 +64,40 @@ getData();
 function heroBtnvalue() {
   if (heroBtn.innerText === "MY PROFILE") {
     window.location.replace("../Profile/Profile.html");
-  }
-  else if(heroBtn.innerText==="BE A MEMBER !"){
-    window.location.replace('../index.html')
+  } else if (heroBtn.innerText === "BE A MEMBER !") {
+    window.location.replace("../index.html");
   }
 }
 
 heroBtn.addEventListener("click", heroBtnvalue);
+
+
+//  Swiper //
+
+
+const swiper = new Swiper('.swiper', {
+  loop:true,
+  slidesPerView: 1,
+  spaceBetween: 10,
+  grabCursor:true,
+  breakpoints: {
+    550: {
+      slidesPerView: 3,
+      spaceBetween: 30
+    },
+    830: {
+      slidesPerView: 2,
+      spaceBetween: 30
+    }
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    type:'bullets',
+    clickable:true,
+    dynamicBullets:true
+  }
+})
