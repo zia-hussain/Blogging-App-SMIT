@@ -25,7 +25,7 @@ skipBtn.addEventListener("click", () => {
 });
 loginSkip.addEventListener("click", () => {
   localStorage.removeItem("Uid");
-  window.location.replace("../Dashboard/dashboard.html");
+  window.open("./Dashboard/dashboard.html", "_blank");
 });
 
 //   +++++++++++++++++++++++++++++++++++++++++
@@ -129,7 +129,7 @@ let SignInUser = (e) => {
     .then((credential) => {
       console.log(credential);
       localStorage.setItem("Uid", credential.user.uid);
-      window.open("../Dashboard/dashboard.html", "_blank");
+      window.open("./Dashboard/dashboard.html", "_blank");
       email.value = "";
       password.value = "";
     })
