@@ -76,14 +76,28 @@ heroBtn.addEventListener("click", heroBtnvalue);
 
 
 const swiper = new Swiper('.swiper', {
-  loop:true,
+  loop: true,
   slidesPerView: 1,
   spaceBetween: 10,
-  grabCursor:true,
+  grabCursor: true,
+  autoplay: {
+    delay: 4000,
+    disableOnInteraction: false,
+  },
+  effect: 'coverflow', // Use the "coverflow" effect for a custom transition
+  coverflowEffect: {
+    rotate: 50, 
+    slideShadows: true,
+  },
   breakpoints: {
     550: {
       slidesPerView: 3,
-      spaceBetween: 30
+      spaceBetween: 30,
+      coverflowEffect: {
+        rotate: 5, 
+        slideShadows: true,
+      },
+
     },
     830: {
       slidesPerView: 2,
@@ -96,8 +110,54 @@ const swiper = new Swiper('.swiper', {
   },
   pagination: {
     el: '.swiper-pagination',
-    type:'bullets',
-    clickable:true,
-    dynamicBullets:true
+    type: 'bullets',
+    clickable: true,
+    dynamicBullets: true
   }
-})
+});
+
+// Second //
+
+
+const swiper2 = new Swiper('.all-blogs', {
+  loop: true,
+  slidesPerView: 1,
+  spaceBetween: 10,
+  grabCursor: true,
+  autoplay: {
+    delay: 3000,
+    disableOnInteraction: false,
+  },
+  effect: 'coverflow', // Use the "coverflow" effect
+      coverflowEffect: {
+        rotate: 50, // Set the rotation angle
+        slideShadows: true,
+      },
+  breakpoints: {
+    550: {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      coverflowEffect: {
+        rotate: 10, // Set the rotation angle
+        slideShadows: true,
+      },
+    },
+    830: {
+      slidesPerView: 2,
+      spaceBetween: 30
+    }
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    type: 'bullets',
+    clickable: true,
+    dynamicBullets: true
+  }
+});
+
+
+

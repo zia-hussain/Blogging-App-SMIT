@@ -20,7 +20,9 @@
   color: #fff;
 }
 
-body {
+body,
+html {
+  scroll-behavior: smooth;
   width: 100%;
   height: 100%;
   position: relative;
@@ -33,6 +35,7 @@ body a {
   text-decoration: none;
   color: #fff;
 }
+
 .container {
   position: absolute;
   top: 0;
@@ -40,6 +43,10 @@ body a {
   left: 0;
   height: 100vh;
   width: 100vw;
+}
+#nav {
+  position: fixed;
+  z-index: 999;
 }
 .nav {
   min-width: 100vw;
@@ -122,10 +129,10 @@ ul li {
 }
 button {
   width: max-content;
-  padding: 0.7rem 1.2rem;
+  padding: 0.5rem 1rem;
   border: none;
   outline: none;
-  border-radius: 30px;
+  border-radius: 7px;
   background-color: #fff;
   color: #012d3c;
   font-size: 0.9rem;
@@ -136,7 +143,6 @@ button {
   cursor: pointer;
   display: block;
   transition: all 0.2s ease-in;
-  border: 1px solid #fff;
   display: none;
 }
 button:hover {
@@ -155,7 +161,7 @@ button:hover {
 
 .hero-section {
   width: 100vw;
-  height: 88vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -218,14 +224,13 @@ button:hover {
 #h-btn {
   margin-top: 10px;
   background: transparent;
-  border: 2px solid #012d3c;
-  /* background: rgba(0, 0, 0, 0.1); */
   background: #012d3c;
   backdrop-filter: blur(10px);
   color: #fff;
   display: none;
   transition: all 0.2s ease-in;
   margin-inline: auto;
+  padding: 1.2rem 3rem;
 }
 #h-btn:hover {
   background-color: #fff;
@@ -256,44 +261,74 @@ button:hover {
 }
 
 /*+++++++++++++++++ ================    Blogs  +++++++++*/
-.main-container{
+.main-container {
   width: 100%;
-  height: 100vh;
-  background-color: #f0f4fb;
+  height: max-content;
+  /* background-color: #ececec; */
+  /* background-color: rgba(0, 0, 0, 0.9); */
   font-size: 1rem;
   line-height: 1.5;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* margin-top: 20rem; */
+  padding-top: 10rem;
+  position: relative;
 }
-.article-container{
+
+#all-blogs {
+  width: 100%;
+  height: max-content;
+  font-size: 1rem;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10rem;
+  position: relative;
+}
+
+.all-blogs {
+  background-size: cover;
+  background-position: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transform-origin: top center;
+  /* margin-top: 25rem; */
+}
+.article-container {
   max-width: 1024px;
   width: 100%;
-  margin: 0 auto;
+  margin-inline: auto;
   padding: 2.5rem 1.5rem;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.article__card{
+.article__card {
   width: 17.5rem;
   height: 100%;
   background: #fff;
   border-radius: 1.25rem;
   overflow: hidden;
-
 }
-.article__image img{
+.article__image {
+  height: 18rem;
+}
+.article__image img {
   width: 100%;
-  height: auto;
+  height: 100%;
   border-radius: 1.25rem 1.25rem 0 0;
   object-fit: cover;
 }
-.article__content{
+.article__content {
   padding: 1.5rem;
 }
-.card__category{
+.card__category {
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.1rem;
@@ -301,46 +336,75 @@ button:hover {
   color: #333;
   display: block;
 }
-.card__title{
-  margin: .8rem;
+.card__title {
+  margin: 0.8rem;
   color: #22447b;
   height: 3rem;
 }
-.card__excerpt{
+.card__excerpt {
   color: #22447b;
   margin: 0;
-};
-.swiper-pagination{
+}
+.swiper-pagination {
   height: 2rem;
 }
 
-#prev-btn, #next-btn{
-background-color: #012d3c;
-width: 2rem;
-height: 2rem;
-border-radius: 50%;
-padding: 1.2rem;
-color: #fff;
-transition: transform 0.1s ease-in;
+#prev-btn,
+#next-btn {
+  background-color: #012d3c;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  padding: 1.2rem;
+  color: #fff;
+  transition: transform 0.1s ease-in;
 }
-#prev-btn:active, #next-btn:active{
+#prev-btn:active,
+#next-btn:active {
   transform: scale(0.95);
 }
 
-#next-btn::after{
-  content: '⮞';
+#next-btn::after {
+  content: "⮞";
   font-size: 1.25rem;
-left: 13px;
-position: absolute;
-
-
+  left: 13px;
+  position: absolute;
 }
-#prev-btn::after{
-  content: '⮞';
+#prev-btn::after {
+  content: "⮞";
   rotate: 180deg;
   font-size: 1.25rem;
-position: absolute;
-left: 9px;
+  position: absolute;
+  left: 9px;
+}
+
+.viewmore {
+  padding: 0.8rem 1.2rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 1rem;
+  float: right;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.viewmore:hover {
+  background-color: rgba(0, 0, 0, 0.692);
+}
+
+#swiper-head {
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  color: #fff;
+  font-size: 3rem;
+  color: #012d3c;
+}
+#all-blogs-head {
+  position: absolute;
+  top: 2%;
+  left: 15%;
+  color: #fff;
+  color: #012d3c;
+  font-size: 2.5rem;
 }
 /*Slider Khatam */
 

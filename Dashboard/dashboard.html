@@ -3,15 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>DashBoard</title>
+    <!-- Bootstrap CSS -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    /> -->
 
-    <!-- Swiper  -->
+    <!-- Swiper CSS -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
 
-    <link rel="stylesheet" href="dasboard.css" />
+    <!-- Font Awesome CSS -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -19,11 +27,15 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="dasboard.css" />
   </head>
+
   <body>
     <section class="wrapper">
       <div class="container">
-        <nav class="nav">
+        <nav id="nav" class="nav">
           <div class="nav-left">
             <i id="menu" onclick="showmenu()" class="fa-solid fa-bars"></i>
             <i
@@ -38,9 +50,8 @@
             <ul id="items">
               <a href="dashboard.html"><li id="line">Dashboard</li></a>
               <a class="if-login" href="#"><li id="line">New Blog</li></a>
-
-              <a href="#"><li id="line">Recent Blogs</li></a>
-              <a href="#"><li id="line">All Blogs</li></a>
+              <a href="#main-container"><li id="line">Recent Blogs</li></a>
+              <a href="#all-blogs"><li id="line">All Blogs</li></a>
               <a
                 class="if-login"
                 id="user-profile"
@@ -70,7 +81,7 @@
               </p>
               <a href="#"><button id="h-btn"></button></a>
             </div>
-            <div class="pc_landing_main_screen-scroll-indicator">
+            <a href="#main-container" class="pc_landing_main_screen-scroll-indicator">
               <svg
                 width="1em"
                 height="1em"
@@ -113,17 +124,18 @@
                   ></path>
                 </g>
               </svg>
-            </div>
+            </a>
           </div>
         </div>
 
         <!---  Slider------->
-        <div class="main-container">
+        <div id="main-container" class="main-container">
+          <h1 id="swiper-head">Recents Blogs</h1>
           <div class="article-container swiper">
-            <div class="card-wrapper swiper-wrapper" >
-              <article class="article__card swiper-slide " data-swiper-autoplay="2000">
+            <div class="card-wrapper swiper-wrapper">
+              <article class="article__card swiper-slide">
                 <figure class="article__image">
-                  <img src="profile.webp" alt="" />
+                  <img src="download.jpeg" alt="" />
                 </figure>
                 <div class="article__content">
                   <a href="#" class="card__category"> Programming </a>
@@ -132,12 +144,14 @@
                     Just Because to post and see the blogs and gain knoeledge
                     about the world !
                   </p>
+                  <!-- <button style="background-color: aqua;">View More</button> -->
                 </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
               </article>
 
               <article class="article__card swiper-slide">
                 <figure class="article__image">
-                  <img src="profile.webp" alt="" />
+                  <img src="download.jpeg" alt="" />
                 </figure>
                 <div class="article__content">
                   <a href="#" class="card__category"> Programming </a>
@@ -146,12 +160,30 @@
                     Just Because to post and see the blogs and gain knoeledge
                     about the world !
                   </p>
+                  <!-- <button style="background-color: aqua;">View More</button> -->
                 </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
               </article>
 
               <article class="article__card swiper-slide">
                 <figure class="article__image">
-                  <img src="profile.webp" alt="" />
+                  <img src="download (1).jpeg" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                  <!-- <button style="background-color: aqua;">View More</button> -->
+                </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="download (1).jpeg" alt="" />
                 </figure>
                 <div class="article__content">
                   <a href="#" class="card__category"> Programming </a>
@@ -161,6 +193,22 @@
                     about the world !
                   </p>
                 </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="download (1).jpeg" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
               </article>
             </div>
             <!-- If we need pagination -->
@@ -173,6 +221,81 @@
         </div>
 
         <!----Slider Khatam----->
+
+        <div id="all-blogs" class="all-blogs-container">
+          <div id="all-blogs-head">
+            <h1>ALL Blogs</h1>
+          </div>
+          <div class="article-container all-blogs">
+            <div class="card-wrapper swiper-wrapper">
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="download.jpeg" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="download.jpeg" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="download (1).jpeg" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
+              </article>
+
+              <article class="article__card swiper-slide">
+                <figure class="article__image">
+                  <img src="download (1).jpeg" alt="" />
+                </figure>
+                <div class="article__content">
+                  <a href="#" class="card__category"> Programming </a>
+                  <h3 class="card__title">why are u here ?</h3>
+                  <p class="card__excerpt">
+                    Just Because to post and see the blogs and gain knoeledge
+                    about the world !
+                  </p>
+                </div>
+                <a id="btn" class="viewmore" href="#">View More</a>
+              </article>
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+
+            <!-- If we need navigation buttons -->
+            <div id="prev-btn" class="swiper-button-prev"></div>
+            <div id="next-btn" class="swiper-button-next"></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -208,5 +331,7 @@
     </script>
 
     <script type="module" src="dashborad.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>
