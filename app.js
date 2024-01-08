@@ -4,14 +4,18 @@ const container = document.querySelector(".container");
 const skipBtn = document.getElementById("skip");
 const loginSkip = document.getElementById("l-skip");
 let forgot = document.getElementById("forgot");
+let username = document.getElementById("username");
+let signInForm = document.getElementById("signin-btn");
+let signUpForm = document.querySelector(".sign-up-form");
+const fb = document.getElementById("fb");
+let email = document.getElementById("email");
+let password = document.getElementById("password");
 
 if (forgot) {
   forgot.addEventListener("click", forgotPass);
 } else {
   console.log("Element with ID 'forgot' not found.");
 }
-
-
 
 sign_up_btn.addEventListener("click", () => {
   container.classList.add("sign-up-mode");
@@ -29,11 +33,6 @@ loginSkip.addEventListener("click", () => {
 });
 
 //   +++++++++++++++++++++++++++++++++++++++++
-
-let username = document.getElementById("username");
-let signInForm = document.getElementById("signin-btn");
-let signUpForm = document.querySelector(".sign-up-form");
-const fb = document.getElementById("fb");
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
@@ -117,13 +116,15 @@ let registerUser = (e) => {
       alert(error.message);
     });
 };
-signUpForm.addEventListener("submit", registerUser);
+signUpForm.addEventListener("submit", function(event) {
+  validation(); // Call your validation function
+  registerUser(event); // Call your registerUser function
+});
+
 
 let SignInUser = (e) => {
   e.preventDefault();
 
-  let email = document.getElementById("email");
-  let password = document.getElementById("password");
 
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((credential) => {
@@ -167,10 +168,32 @@ function forgotPass() {
   sendPasswordResetEmail(auth, email.value)
     .then(() => {
       alert("A Password Reset Link is Sent To Your Email");
-      password.value = ""
+      password.value = "";
     })
     .catch((error) => {
       console.log(error.message);
       console.log(error.code);
     });
-};
+}
+
+// function validation() {
+
+// }
+
+function validation(){
+  let emailRegx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/;
+
+  if (email.value === "") {
+    alert('Please enter an email address.');
+  } else if (!emailRegx.test(email.value)) {
+    alert('Please enter a valid email address. Example: john@example.com');
+  }
+  else if(password===""){
+    alert('Password Cannot be empty!')
+  }
+  else if(!passwordRegex.test(password.value)){
+    alert('Invalid password. Minimum 8 characters, include uppercase, lowercase, and digit.')
+  }
+}
+document.querySelector('.btn').addEventListener('click',validation())

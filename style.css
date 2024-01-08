@@ -325,7 +325,25 @@ form.sign-in-form {
 #forgot{
   cursor: pointer;
   display: none;
+  position: relative;
 }
+#forgot::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: #333;
+  transition: width 0.2s, transform 0.2s;
+  transform-origin: right;
+  transform: scaleX(0);
+}
+#forgot:hover::after{
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
 @media (max-width: 870px) {
   .container {
     min-height: 800px;
