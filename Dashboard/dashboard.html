@@ -36,20 +36,36 @@
     <div id="full"></div>
     <section class="wrapper">
       <div class="popup" id="popup">
-        <i
-        onclick="closePopup()"
-        id="close"
-        class="fa-solid fa-times"
-      ></i>
+        <i onclick="closePopup()" id="close" class="fa-solid fa-times"></i>
         <h1>Add Your Blog</h1>
         <div class="input-field">
           <i class="fa-solid fa-lightbulb"></i>
-          <input id="username" type="text" placeholder="Topic" />
+          <input id="topic" type="text" placeholder="Topic" />
         </div>
         <div class="input-field">
           <i class="fa-solid fa-pencil"></i>
-          <input id="username" type="text" placeholder="Title" />
+          <input id="titleinp" type="text" placeholder="Title" />
         </div>
+
+        <!-- // image for blog // -->
+        <div class="input-field">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-image view-icon" id="view-icon"></i>
+          <input id="blog-img" type="file" accept="image/*" />
+          <label for="blog-img" class="file-placeholder"
+            >Place Your Image</label
+          >
+          <img id="image-preview" class="file-preview" src="#" />
+        </div>
+
+        <!-- Modal for larger image view -->
+        <div id="image-modal" class="modal">
+          <div class="modal-content">
+            <i class="fa-solid fa-times close-icon" onclick="closeModal()"></i>
+            <img id="full-image" />
+          </div>
+        </div>
+
         <div class="input-field-t">
           <i class="fa-solid fa-comment"></i>
           <textarea
@@ -176,60 +192,15 @@
                   <img src="download.jpeg" alt="" />
                 </figure>
                 <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
+                  <a href="#" id="b-genre" class="card__category">
+                    Programming
+                  </a>
+                  <h3 class="card__title" id="b-title">why are u here ?</h3>
+                  <p class="card__excerpt" id="b-desc">
                     Just Because to post and see the blogs and gain knoeledge
                     about the world !
                   </p>
                   <!-- <button style="background-color: aqua;">View More</button> -->
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
-
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download.jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
-                  <!-- <button style="background-color: aqua;">View More</button> -->
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
-
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download (1).jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
-                  <!-- <button style="background-color: aqua;">View More</button> -->
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
-
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download (1).jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
                 </div>
                 <a id="btn" class="viewmore" href="#">View More</a>
               </article>
@@ -257,52 +228,11 @@
                   <h3 class="card__title">why are u here ?</h3>
                   <p class="card__excerpt">
                     Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
-
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download.jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
-
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download (1).jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
-
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download (1).jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" class="card__category"> Programming </a>
-                  <h3 class="card__title">why are u here ?</h3>
-                  <p class="card__excerpt">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
+                    about the world ! Lorem ipsum dolor sit amet consectetur
+                    adipisicing elit. Suscipit aut non magnam blanditiis facere
+                    dolorum temporibus velit expedita voluptatum earum quos,
+                    saepe vitae esse, necessitatibus et odio possimus vero
+                    dolore.
                   </p>
                 </div>
                 <a id="btn" class="viewmore" href="#">View More</a>
@@ -327,6 +257,9 @@
       let hide = document.getElementById("closemenu");
       let items = document.getElementById("items");
       let body = document.body;
+      var preview = document.getElementById("image-preview");
+      var viewIcon = document.getElementById("view-icon");
+      var previewIcon = document.querySelector(".file-preview");
 
       function logoutBtn() {
         localStorage.removeItem("Uid");
@@ -350,20 +283,83 @@
       }
 
       // Modal //
-      let background = document.getElementById('full')
+      let background = document.getElementById("full");
       let popup = document.getElementById("popup");
 
       function openPopup() {
         popup.classList.add("open-popup");
-        background.style.display = 'block'
+        background.style.display = "block";
       }
-
       function closePopup() {
         popup.classList.remove("open-popup");
-        background.style.display = 'none'
+        background.style.display = "none";
       }
+
+      document
+        .getElementById("blog-img")
+        .addEventListener("change", function () {
+          var input = this;
+          var label = input.nextElementSibling;
+
+          if (input.files.length > 0) {
+            var fileType = input.files[0].type;
+
+            if (!fileType.startsWith("image/")) {
+              // Clear the selected file if it's not an image
+              input.value = "";
+              label.textContent = "Place Your Image";
+              preview.src = "";
+              viewIcon.style.display = "none";
+              alert("Please select an image file.");
+              return;
+            }
+
+            // Display image preview
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              preview.src = e.target.result;
+              viewIcon.style.display = "block";
+              previewIcon.style.display = "block";
+            };
+            reader.readAsDataURL(input.files[0]);
+
+            var fileName = input.files[0].name;
+            label.textContent = fileName;
+          } else {
+            // Clear the preview and label if no file is selected
+            preview.src = "";
+            label.textContent = "Place Your Image";
+            viewIcon.style.display = "none";
+          }
+        });
+
+      // Function to open the modal and display the full image
+      function openModal() {
+        var modal = document.getElementById("image-modal");
+        modal.style.display = "flex";
+
+        var fullImage = document.getElementById("full-image");
+        fullImage.src = document.getElementById("image-preview").src;
+      }
+
+      // Function to close the modal
+      function closeModal() {
+        var modal = document.getElementById("image-modal");
+        modal.style.display = "none";
+      }
+
+      // Attach click event to the view icon if file is attached
+      var viewIcon = document.getElementById("view-icon");
+      var fileInput = document.getElementById("blog-img");
+
+      fileInput.addEventListener("change", function () {
+        viewIcon.style.display = this.files.length > 0 ? "block" : "none";
+      });
+
+      // Attach click event to the view icon
+      viewIcon.addEventListener("click", openModal);
     </script>
 
-    <script type="module" src="dashborad.js"></script>
+    <script type="module" src="dashborad.js" defer></script>
   </body>
 </html>

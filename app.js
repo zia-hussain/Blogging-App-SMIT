@@ -116,15 +116,13 @@ let registerUser = (e) => {
       alert(error.message);
     });
 };
-signUpForm.addEventListener("submit", function(event) {
+signUpForm.addEventListener("submit", function (event) {
   validation(); // Call your validation function
   registerUser(event); // Call your registerUser function
 });
 
-
 let SignInUser = (e) => {
   e.preventDefault();
-
 
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((credential) => {
@@ -179,21 +177,3 @@ function forgotPass() {
 // function validation() {
 
 // }
-
-function validation(){
-  let emailRegx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/;
-
-  if (email.value === "") {
-    alert('Please enter an email address.');
-  } else if (!emailRegx.test(email.value)) {
-    alert('Please enter a valid email address. Example: john@example.com');
-  }
-  else if(password===""){
-    alert('Password Cannot be empty!')
-  }
-  else if(!passwordRegex.test(password.value)){
-    alert('Invalid password. Minimum 8 characters, include uppercase, lowercase, and digit.')
-  }
-}
-document.querySelector('.btn').addEventListener('click',validation())
