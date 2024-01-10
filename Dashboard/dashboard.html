@@ -52,6 +52,7 @@
           <i class="fa-solid fa-image"></i>
           <i class="fa-solid fa-image view-icon" id="view-icon"></i>
           <input id="blog-img" type="file" accept="image/*" />
+          
           <label for="blog-img" class="file-placeholder"
             >Place Your Image</label
           >
@@ -179,6 +180,7 @@
             </a>
           </div>
         </div>
+        <div id="all-blogs-container"></div>
 
         <!---  Slider------->
         <div id="main-container" class="main-container">
@@ -186,24 +188,15 @@
             <h1>Recent Blogs</h1>
           </div>
           <div class="article-container swiper">
-            <div class="card-wrapper swiper-wrapper">
-              <article class="article__card swiper-slide">
-                <figure class="article__image">
-                  <img src="download.jpeg" alt="" />
-                </figure>
-                <div class="article__content">
-                  <a href="#" id="b-genre" class="card__category">
-                    Programming
-                  </a>
-                  <h3 class="card__title" id="b-title">why are u here ?</h3>
-                  <p class="card__excerpt" id="b-desc">
-                    Just Because to post and see the blogs and gain knoeledge
-                    about the world !
-                  </p>
-                  <!-- <button style="background-color: aqua;">View More</button> -->
-                </div>
-                <a id="btn" class="viewmore" href="#">View More</a>
-              </article>
+            <div class="card-wrapper swiper-wrapper" id="articls">
+              <div class="not-found-container">
+                <img id="not-found" src="not-found.png" alt="" />
+
+                <h1 id="not-found-text">
+                  No blogs are currently available. <br />
+                  Check back later for updates or contribute your own!
+                </h1>
+              </div>
             </div>
             <div class="swiper-pagination"></div>
             <div id="prev-btn" class="swiper-button-prev"></div>
@@ -212,8 +205,34 @@
         </div>
 
         <!----Slider Khatam----->
+        <div id="all-blogs-container"></div>
 
+        <!---  Slider------->
         <div id="all-blogs" class="all-blogs-container">
+          <div id="all-blogs-head">
+            <h1>All Blogs</h1>
+          </div>
+          <div class="article-container all-blogs swiper">
+            <div class="card-wrapper swiper-wrapper" id="all-articls">
+              <div class="not-found-container">
+                <img id="not-found" src="not-found.png" alt="" />
+
+                <h1 id="not-found-text">
+                  No blogs are currently available. <br />
+                  Check back later for updates or contribute your own!
+                </h1>
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div id="prev-btn" class="swiper-button-prev"></div>
+            <div id="next-btn" class="swiper-button-next"></div>
+          </div>
+        </div>
+
+
+
+
+        <!-- <div id="all-blogs" class="all-blogs-container">
           <div id="all-blogs-head">
             <h1>ALL Blogs</h1>
           </div>
@@ -238,14 +257,13 @@
                 <a id="btn" class="viewmore" href="#">View More</a>
               </article>
             </div>
-            <!-- If we need pagination -->
+           If we need pagination 
             <div class="swiper-pagination"></div>
 
-            <!-- If we need navigation buttons -->
             <div id="prev-btn" class="swiper-button-prev"></div>
             <div id="next-btn" class="swiper-button-next"></div>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
 
@@ -290,10 +308,15 @@
         popup.classList.add("open-popup");
         background.style.display = "block";
       }
+    
       function closePopup() {
         popup.classList.remove("open-popup");
         background.style.display = "none";
       }
+
+
+
+      //   ########## Image Preview In Input  ###########//
 
       document
         .getElementById("blog-img")
@@ -358,8 +381,87 @@
 
       // Attach click event to the view icon
       viewIcon.addEventListener("click", openModal);
+
+      // +++++++++++++++++++++    Validaton   +++++++++++++++++++  //
+
+
+      function validateForm() {
+        var topic = document.getElementById("topic").value;
+        var title = document.getElementById("titleinp").value;
+        var desc = document.getElementById("desc").value;
+        var image = document.getElementById("blog-img").value;
+
+        if (topic === "") {
+          alert("Please enter a topic");
+          return false;
+        } else if (title === "") {
+          alert("Please enter a title");
+          return false;
+        } else if (desc === "") {
+          alert("Please enter a description");
+          return false;
+        } else if (image === "") {
+          alert("Please select an image");
+          return false;
+        } else if (desc.length <= 60) {
+          alert("Description should be less than 60 characters");
+          return false;
+        } else {
+          alert("Form submitted successfully!");
+          return true;
+          closePopup();
+        }
+      }
+
+      document
+        .getElementById("upload")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          validateForm();
+          closePopup()
+        });
+
+
     </script>
 
+    <!-- <script>
+      function validateForm() {
+        var topic = document.getElementById("topic").value;
+        var title = document.getElementById("titleinp").value;
+        var desc = document.getElementById("desc").value;
+        var image = document.getElementById("blog-img").value;
+
+        if (topic === "") {
+          alert("Please enter a topic");
+          return false;
+        } else if (title === "") {
+          alert("Please enter a title");
+          return false;
+        } else if (desc === "") {
+          alert("Please enter a description");
+          return false;
+        } else if (image === "") {
+          alert("Please select an image");
+          return false;
+        } else if (desc.length >= 60) {
+          alert("Description should be less than 60 characters");
+          return false;
+        } else {
+          alert("Form submitted successfully!");
+          return true;
+          closePopup();
+        }
+      }
+
+      document
+        .getElementById("upload")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          validateForm();
+        });
+    </script> -->
+
     <script type="module" src="dashborad.js" defer></script>
+    <!-- <script type="module" src="savingImg.js" defer></script> -->
   </body>
 </html>
