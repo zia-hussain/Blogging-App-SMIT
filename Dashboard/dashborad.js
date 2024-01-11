@@ -1,23 +1,23 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  ref,
   getDatabase,
+  ref,
+  push,
+  set,
+  onValue,
   child,
   get,
-  set,
-  push,
-  onValue,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-import {
-  getStorage,
-  ref as storageRef,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+import {
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+  getStorage,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBlpLk8NjMNvY3aFWvzTLp9uX_wVOX4TRY",
   authDomain: "auth-blog-app-assignment.firebaseapp.com",
@@ -51,6 +51,8 @@ const getData = () => {
         btn.style.display = "block";
         heroBtn.innerHTML = "My Profile";
         heroBtn.style.display = "block";
+  fullLoader.style.display = 'none'
+
         // ifLoginBtn.style.display = 'block';
 
         ifLoginBtn.forEach((element) => {
@@ -96,6 +98,17 @@ let descInp = document.getElementById("desc");
 let uploadBtn = document.getElementById("upload");
 let userUid = localStorage.getItem("Uid");
 const show = document.getElementById("blogshow");
+//  Loader //
+
+const loaderContainer = document.getElementById("spinner");
+const fullLoader = document.getElementById("t-spinner");
+let body = document.body
+loaderContainer.style.display = "flex";
+
+// document.addEventListener('DOMContentLoaded',()=>{
+//   fullLoader.style.display = 'none'
+// })
+
 function addBlog() {
   if (genreInp.value === "") {
     alert("Please Add Genre/Topic for Your Blog");
@@ -110,10 +123,16 @@ function addBlog() {
     return false;
   } else {
     addData();
+    document.location.reload()
+    closePopup();
   }
 }
 function closePopup() {
   popup.classList.remove("open-popup");
+  // genreInp.value = ""
+  // bTitleInp.value = ""
+  // blogImg.value = ""
+  // descInp.value = ""
   background.style.display = "none";
 }
 function closemenu() {
@@ -148,26 +167,30 @@ let addData = () => {
 
   // Get the randomly generated key
   const newBlogId = newBlogRef.key;
-
-  // Data to be saved
-  const blogData = {
-    genreofBlog: genreInp.value,
-    titleofBlog: bTitleInp.value,
-    descofBlog: descInp.value,
-    createdBy: userUid,
-    publishDate: date,
-    timestamp: twentyFourHoursLater, // Add timestamp field
-  };
-
-  set(ref(db, "BlogData/" + userUid + "/" + newBlogId), blogData)
-    .then(() => {})
+  uploadImage()
+    .then((res) => {
+      const blogData = {
+        genreofBlog: genreInp.value,
+        titleofBlog: bTitleInp.value,
+        descofBlog: descInp.value,
+        createdBy: userUid,
+        publishDate: date,
+        timestamp: twentyFourHoursLater, // Add timestamp field
+        imgUrl: res,
+      };
+      set(ref(db, "BlogData/" + userUid + "/" + newBlogId), blogData)
+        .then(() => {})
+        .catch((err) => {});
+    })
     .catch((err) => {});
+  // Data to be saved
 };
 
 const allBlogsContainer = document.getElementById("articls");
 const getAllBlogs = () => {
   const allUsersRef = ref(db, "BlogData");
   let notFoundCon = document.querySelector(".not-found-container");
+  loaderContainer.style.display = "flex";
 
   // Attach a listener to retrieve data when it changes
   onValue(
@@ -175,6 +198,7 @@ const getAllBlogs = () => {
     (snapshot) => {
       // Clear existing content in the container
       notFoundCon.style.display = "none";
+      loaderContainer.style.display = "none";
 
       // Check if there are no blogs
       if (!snapshot.hasChildren()) {
@@ -226,7 +250,7 @@ const getAllBlogs = () => {
 
                 blogElement.innerHTML = `
                   <figure class="article__image">
-                    <img src="download (1).jpeg" alt="" />
+                    <img src="${blogData.imgUrl}" alt="" />
                   </figure>
                   <div class="article__content">
                     <a href="#" class="card__category">${blogData.genreofBlog}</a>
@@ -248,6 +272,7 @@ const getAllBlogs = () => {
           },
           (error) => {
             console.log(error);
+            loaderContainer.style.display = "none";
           }
         );
       });
@@ -263,7 +288,7 @@ getAllBlogs();
 const allBlogsArticles = document.getElementById("all-articls");
 const getBlogsForAllBLog = () => {
   const allUsersRef = ref(db, "BlogData");
-  let notFoundCon = document.querySelector(".not-found-container");
+  let notFoundCon = document.getElementById("all-not-found");
 
   onValue(
     allUsersRef,
@@ -318,7 +343,7 @@ const getBlogsForAllBLog = () => {
 
                 blogElement.innerHTML = `
                   <figure class="article__image">
-                    <img src="download (1).jpeg" alt="" />
+                    <img src="${blogData.imgUrl}" alt="" />
                   </figure>
                   <div class="article__content">
                     <a href="#" class="card__category">${blogData.genreofBlog}</a>
@@ -351,80 +376,81 @@ const getBlogsForAllBLog = () => {
 };
 getBlogsForAllBLog();
 
-// +++++++++++++++++++++++++++++++++++++               Adding image //
+// +++++++++++++++++++++++++++++++++++++               Getting image //
+let blogImg = document.getElementById("blog-img");
+blogImg.onchange = function () {
+  handleImageUpload();
+};
+function handleImageUpload() {
+  const inputElement = document.getElementById("blog-img");
+  const file = inputElement.files[0];
+
+  if (file) {
+    // You can log the file object or its properties to the console
+    console.log("Selected Image:", inputElement.files[0].name);
+    // cos;
+    // If you want to display the image preview, you can create a FileReader
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const imagePreview = new Image();
+      imagePreview.src = e.target.result;
+
+      // Log the image preview to the console or append it to the DOM
+      console.log("Image Preview:", imagePreview);
+    };
+
+    reader.readAsDataURL(file);
+  } else {
+    console.log("No image selected.");
+  }
+}
+
+// Upload Images to Firebase //
+
+function uploadImage() {
+  return new Promise((resolve, reject) => {
+    const fileInput = document.getElementById("blog-img");
+    const file = fileInput.files[0];
+    let name = fileInput?.files[0]?.name;
+    
+    if (file) {
+      const imageRef = storageRef(storage, `images/${name + new Date().getMilliseconds()}`);
+      
+      uploadBytes(imageRef, file)
+        .then((snapshot) => getDownloadURL(snapshot.ref))
+        .then((url) => {
+          console.log("Image uploaded successfully:", url);
+          resolve(url); // Resolve the Promise with the URL
+        })
+        .catch((error) => {
+          console.error("Error uploading image:", error);
+          reject(error); // Reject the Promise with the error
+        });
+    } else {
+      const error = new Error("No image selected.");
+      console.error(error.message);
+      reject(error); // Reject the Promise with the error
+    }
+  });
+}
+// uploadImage()
+//   .then((url) => {
+//     // Handle the URL here
+//     console.log("URL:", url);
+//   })
+//   .catch((error) => {
+//     // Handle errors here
+//     console.error("Error:", error);
+//   });
+
+// uploadBtn.addEventListener("click", uploadImage);
 
 // +++++++++++++++++++++++++++++++++++++               Adding image //
 document.getElementById("upload").addEventListener("click", function (event) {
   event.preventDefault();
   uploadImage();
 });
-
-function uploadImage() {
-  console.log("first");
-  const imageInput = document.getElementById("blog-img");
-
-  imageInput.addEventListener("change", (event) => {
-    const selectedImage = event.target.files[0];
-
-    console.log("Selected Image:", selectedImage);
-    if (selectedImage) {
-      // Use 'selectedImage' as needed, such as displaying it or uploading it.
-      console.log("Selected Image:", selectedImage);
-    }
-  });
-  // var imageFile = document.getElementById('blog-img')
-  // console.log(imageFile);
-
-  //   if (!imageFile) {
-  //     alert('Please select an image');
-  //     return;
-  //   }
-
-  //   var imageName = imageFile.name;
-  //   var storageRef = storageRef(storage, 'images/' + imageName);
-  //   var uploadTask = uploadBytesResumable(storageRef, imageFile);
-
-  //   uploadTask
-  //     .then(snapshot => getDownloadURL(snapshot.ref))
-  //     .then(downloadURL => {
-  //       saveImageToDatabase(downloadURL);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error uploading image:', error);
-  //     });
-  // }
-
-  // function saveImageToDatabase(downloadURL) {
-  //   // Save download URL to your Firebase Realtime Database
-  //   var blogData = {
-  //     // your other blog data
-  //     imageURL: downloadURL
-  //   };
-
-  //   // Assuming you have a specific reference for blogs, update this line accordingly
-  //   var newBlogRef = push(ref(db, 'BlogData/' + userUid));
-  //   set(newBlogRef, blogData);
-
-  //   // You can then use this downloadURL to display the image in your blog card
-  //   displayImageInBlogCard(downloadURL);
-  // }
-
-  // function displayImageInBlogCard(imageURL) {
-  //   // Create HTML elements to display the blog data, including the image
-  //   const blogElement = document.createElement('article');
-  //   blogElement.classList.add('article__card', 'swiper-slide');
-
-  //   blogElement.innerHTML = `
-  //     <figure class="article__image">
-  //       <img src="${imageURL}" alt="" />
-  //     </figure>
-  //     <!-- Rest of your HTML code... -->
-  //     <a class="btn" id="viewmore" href="#">View More</a>
-  //   `;
-
-  //   // Append the blog element to the container
-  //   allBlogsArticles.appendChild(blogElement);
-}
 
 const swiper = new Swiper(".swiper", {
   loop: true,
@@ -453,9 +479,7 @@ const swiper = new Swiper(".swiper", {
     dynamicBullets: true,
   },
 });
-
 // Second //
-
 const swiper2 = new Swiper(".all-blogs", {
   loop: true,
   slidesPerView: 1,

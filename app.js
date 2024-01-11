@@ -117,7 +117,6 @@ let registerUser = (e) => {
     });
 };
 signUpForm.addEventListener("submit", function (event) {
-  validation(); // Call your validation function
   registerUser(event); // Call your registerUser function
 });
 
@@ -140,26 +139,31 @@ let SignInUser = (e) => {
 };
 signInForm.addEventListener("click", SignInUser);
 
-let fbbc = () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const user = result.user;
 
-      const credential = FacebookAuthProvider.credentialFromResult(result);
-      const accessToken = credential.accessToken;
-      console.log(accessToken);
-      alert(`Welcome ${user.displayName}`);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const emaill = error.customData.email;
-      const credential = FacebookAuthProvider.credentialFromError(error);
-      console.log(error);
-      console.log(errorCode, errorMessage, emaill);
-    });
-};
-fb.addEventListener("click", fbbc);
+
+// ++++++++++++v @@@@@@@@@@@@@###########        FOR FACEBOOK AUTHENTICATION      ###########@@@@@@@@@@@@+++++++++++
+
+
+// let fbbc = () => {
+//   signInWithPopup(auth, provider)
+//     .then((result) => {
+//       const user = result.user;
+
+//       const credential = FacebookAuthProvider.credentialFromResult(result);
+//       const accessToken = credential.accessToken;
+//       console.log(accessToken);
+//       alert(`Welcome ${user.displayName}`);
+//     })
+//     .catch((error) => {
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       const emaill = error.customData.email;
+//       const credential = FacebookAuthProvider.credentialFromError(error);
+//       console.log(error);
+//       console.log(errorCode, errorMessage, emaill);
+//     });
+// };
+// fb.addEventListener("click", fbbc);
 
 function forgotPass() {
   console.log("first");

@@ -179,7 +179,7 @@
             </p>
             <button class="btn transparent" id="sign-in-btn">Sign in</button>
           </div>
-          <img src="img/register.svg" class="image" alt="" />
+          <img src="img/undraw_feeling_proud_qne1.svg" class="image"  />
         </div>
       </div>
     </div>
@@ -222,32 +222,35 @@
           unshow.style.display = "block";
         }
       }
-      let validation = (event) => {
-        event.preventDefault();
-        let emailRegx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/;
+    //  window.validation = function(){
+    //     let emailRegx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    //     let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/;
 
-        let email = document.getElementById("email"); // assuming you have an input with id="email"
-        let password = document.getElementById("password"); // assuming you have an input with id="password"
+    //     let email = document.getElementById("email"); // assuming you have an input with id="email"
+    //     let password = document.getElementById("password"); // assuming you have an input with id="password"
 
-        if (email.value === "") {
-          alert("Please enter an email address.");
-        } else if (!emailRegx.test(email.value)) {
-          alert(
-            "Please enter a valid email address. Example: john@example.com"
-          );
-        } else if (password.value === "") {
-          alert("Password Cannot be empty!");
-        } else if (!passwordRegex.test(password.value)) {
-          alert(
-            "Invalid password. Minimum 8 characters, include uppercase, lowercase, and digit."
-          );
-        }
-      };
+    //     if (email.value === "") {
+    //       alert("Please enter an email address.");
+    //     } else if (!emailRegx.test(email.value)) {
+    //       alert(
+    //         "Please enter a valid email address. Example: john@example.com"
+    //       );
+    //     } else if (password.value === "") {
+    //       alert("Password Cannot be empty!");
+    //     } else if (!passwordRegex.test(password.value)) {
+    //       alert(
+    //         "Invalid password. Minimum 8 characters, include uppercase, lowercase, and digit."
+    //       );
+    //     }
+    //   };
 
-      document
-        .getElementById("sign-in-btn")
-        .addEventListener("click", validation);
-    </script>
+    //   document
+    //     .getElementById("sign-in-btn")
+    //     .addEventListener("click", validation());
+ 
+ 
+ 
+ 
+ </script>
   </body>
 </html>
