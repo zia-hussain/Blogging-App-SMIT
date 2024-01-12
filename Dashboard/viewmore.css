@@ -1,0 +1,156 @@
+@font-face {
+  font-family: "Gilroy";
+  src: url("../fonts/Gilroy-Regular.ttf") format("truetype"),
+    url("../fonts/Gilroy-Heavy.ttf") format("truetype"),
+    url("../fonts/Gilroy-Bold.ttf") format("truetype"),
+    url("../fonts/Gilroy-ExtraBold.ttf") format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body::-webkit-scrollbar {
+  width: 0px;
+}
+body {
+  overflow-x: hidden;
+  font-family: "Gilroy";
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+.wrapper {
+  height: 100%;
+  width: 100%;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.nav {
+  width: 100%;
+  height: 12vh;
+  background-color: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-left {
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+  flex-basis: 50%;
+  gap: 2rem;
+}
+.nav-left h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  user-select: none;
+}
+.nav .nav-right {
+  flex-basis: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  padding-right: 4rem;
+}
+.nav .nav-right a {
+  color: #fff;
+  text-decoration: none;
+  position: relative;
+}
+#line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: #fff;
+  transition: width 0.2s, transform 0.2s;
+  transform-origin: right;
+  transform: scaleX(0);
+}
+#line:hover::after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+/* +++++++++++++++++++               Image Container         ++++++++++++++++++ */
+
+.image-container {
+    margin: 1rem;
+  height: 70vh;
+  width: 95%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 10px solid #fff;
+}
+
+.container {
+  position: absolute;
+  height: 100vh;
+  width: 80%;
+  background-color: #fff;
+  top: 70%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: 10px solid #fff;
+
+
+}
+.container .postingDets {
+  height: 40vh;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding-inline: 10px;
+  backdrop-filter: blur(10px);
+}
+.container .postingDets #title {
+  height: max-content;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4rem;
+}
+#title {
+  font-size: 4rem;
+  font-weight: 800;
+}
+.author {
+  position: absolute;
+  right: 0px;
+  bottom: 80px;
+}
+.date {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  float: left;
+}
+.desc{
+    height: 100vh;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    line-height: 30px;
+}

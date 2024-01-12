@@ -8,7 +8,6 @@ import {
   child,
   get,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
   ref as storageRef,
@@ -29,7 +28,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-
 const db = getDatabase();
 const auth = getAuth(app);
 let id = localStorage.getItem("Uid");
@@ -51,7 +49,7 @@ const getData = () => {
         btn.style.display = "block";
         heroBtn.innerHTML = "My Profile";
         heroBtn.style.display = "block";
-  fullLoader.style.display = 'none'
+        fullLoader.style.display = "none";
 
         // ifLoginBtn.style.display = 'block';
 
@@ -83,7 +81,6 @@ function heroBtnvalue() {
   }
 }
 heroBtn.addEventListener("click", heroBtnvalue);
-
 // */  BLogs CardData */
 let genre = document.getElementById("b-genre");
 let bTitle = document.getElementById("b-title");
@@ -99,15 +96,10 @@ let uploadBtn = document.getElementById("upload");
 let userUid = localStorage.getItem("Uid");
 const show = document.getElementById("blogshow");
 //  Loader //
-
 const loaderContainer = document.getElementById("spinner");
 const fullLoader = document.getElementById("t-spinner");
-let body = document.body
+let body = document.body;
 loaderContainer.style.display = "flex";
-
-// document.addEventListener('DOMContentLoaded',()=>{
-//   fullLoader.style.display = 'none'
-// })
 
 function addBlog() {
   if (genreInp.value === "") {
@@ -123,16 +115,12 @@ function addBlog() {
     return false;
   } else {
     addData();
-    document.location.reload()
+    // document.location.reload()
     closePopup();
   }
 }
 function closePopup() {
   popup.classList.remove("open-popup");
-  // genreInp.value = ""
-  // bTitleInp.value = ""
-  // blogImg.value = ""
-  // descInp.value = ""
   background.style.display = "none";
 }
 function closemenu() {
@@ -142,15 +130,12 @@ function closemenu() {
     show.style.display = "block";
   }
 }
-
 uploadBtn.addEventListener("click", addBlog);
-
 // ++++++++++++++++++++++++++++            database             +++++++++++++++++
 const currentDate = new Date();
 let date = `${currentDate.getDate()}/${
   currentDate.getMonth() + 1
 }/${currentDate.getFullYear()}`;
-
 let addData = () => {
   const db = getDatabase();
   const currentDate = new Date();
@@ -191,7 +176,6 @@ const getAllBlogs = () => {
   const allUsersRef = ref(db, "BlogData");
   let notFoundCon = document.querySelector(".not-found-container");
   loaderContainer.style.display = "flex";
-
   // Attach a listener to retrieve data when it changes
   onValue(
     allUsersRef,
@@ -199,20 +183,16 @@ const getAllBlogs = () => {
       // Clear existing content in the container
       notFoundCon.style.display = "none";
       loaderContainer.style.display = "none";
-
       // Check if there are no blogs
       if (!snapshot.hasChildren()) {
         notFoundCon.style.display = "flex";
         return;
       }
-
       // Iterate over each user
       snapshot.forEach((userSnapshot) => {
         const userId = userSnapshot.key;
-
         // Get the reference to the user's blogs
         const userBlogsRef = ref(db, `BlogData/${userId}`);
-
         // Attach a listener to retrieve user's blog data
         onValue(
           userBlogsRef,
@@ -222,32 +202,26 @@ const getAllBlogs = () => {
               notFoundCon.style.display = "flex";
               return;
             }
-
             // Iterate over each blog entry for the user
             userBlogsSnapshot.forEach((blogSnapshot) => {
               const blogData = blogSnapshot.val();
-
+              const blogId = blogSnapshot.key; // Get the blogId
               // Check if the blog is older than 12 hours
               const currentTimestamp = new Date().getTime();
               const twelveHoursAgo = currentTimestamp - 12 * 60 * 60 * 1000;
-
               if (blogData.timestamp < twelveHoursAgo) {
                 // Blog is older than 12 hours, don't display it
                 return;
               }
-
               // Fetch additional user data
               const userRef = ref(db, `UsersUid/${userId}`);
               get(userRef).then((userSnapshot) => {
                 const userData = userSnapshot.val();
-
                 // Get the published date or set a default value
                 const publishedDate = blogData.publishDate || "Not Available";
-
                 // Create HTML elements to display the blog data
                 const blogElement = document.createElement("article");
                 blogElement.classList.add("article__card", "swiper-slide");
-
                 blogElement.innerHTML = `
                   <figure class="article__image">
                     <img src="${blogData.imgUrl}" alt="" />
@@ -261,10 +235,8 @@ const getAllBlogs = () => {
                     <h3 class="card__title">${blogData.titleofBlog}</h3>
                     <p class="card__excerpt">${blogData.descofBlog}</p>
                   </div>
-                <a class="btn" id="viewmore" href="#">View More</a>
-
+                  <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}">View More</a>
                 `;
-
                 // Append the blog element to the container
                 allBlogsContainer.appendChild(blogElement);
               });
@@ -282,32 +254,27 @@ const getAllBlogs = () => {
     }
   );
 };
+// Call the function to fetch and display blogs
 getAllBlogs();
-
 // #####################3       Get All Blogs Function       ######################3
 const allBlogsArticles = document.getElementById("all-articls");
 const getBlogsForAllBLog = () => {
   const allUsersRef = ref(db, "BlogData");
   let notFoundCon = document.getElementById("all-not-found");
-
   onValue(
     allUsersRef,
     (snapshot) => {
       notFoundCon.style.display = "none";
-
       // Check if there are no blogs
       if (!snapshot.hasChildren()) {
         notFoundCon.style.display = "flex";
         return;
       }
-
       // Iterate over each user
       snapshot.forEach((userSnapshot) => {
         const userId = userSnapshot.key;
-
         // Get the reference to the user's blogs
         const userBlogsRef = ref(db, `BlogData/${userId}`);
-
         // Attach a listener to retrieve user's blog data
         onValue(
           userBlogsRef,
@@ -317,30 +284,24 @@ const getBlogsForAllBLog = () => {
               notFoundCon.style.display = "flex";
               return;
             }
-
             // Iterate over each blog entry for the user
             userBlogsSnapshot.forEach((blogSnapshot) => {
               const blogData = blogSnapshot.val();
-
               // Check if the blog is older than 24 hours
               const currentTimestamp = new Date().getTime();
               if (blogData.timestamp < currentTimestamp) {
                 // Blog is older than 24 hours, don't display it
                 return;
               }
-
               // Fetch additional user data
               const userRef = ref(db, `UsersUid/${userId}`);
               get(userRef).then((userSnapshot) => {
                 const userData = userSnapshot.val();
-
                 // Get the published date or set a default value
                 const publishedDate = blogData.publishDate || "Not Available";
-
                 // Create HTML elements to display the blog data
                 const blogElement = document.createElement("article");
                 blogElement.classList.add("article__card", "swiper-slide");
-
                 blogElement.innerHTML = `
                   <figure class="article__image">
                     <img src="${blogData.imgUrl}" alt="" />
@@ -354,10 +315,8 @@ const getBlogsForAllBLog = () => {
                     <h3 class="card__title">${blogData.titleofBlog}</h3>
                     <p class="card__excerpt">${blogData.descofBlog}</p>
                   </div>
-                <a class="btn" id="viewmore" href="#">View More</a>
-
+                <a class="btn" id="viewmore" href="./viewmore.html">View More</a>
                 `;
-
                 // Append the blog element to the container
                 allBlogsArticles.appendChild(blogElement);
               });
@@ -375,7 +334,6 @@ const getBlogsForAllBLog = () => {
   );
 };
 getBlogsForAllBLog();
-
 // +++++++++++++++++++++++++++++++++++++               Getting image //
 let blogImg = document.getElementById("blog-img");
 blogImg.onchange = function () {
@@ -384,39 +342,36 @@ blogImg.onchange = function () {
 function handleImageUpload() {
   const inputElement = document.getElementById("blog-img");
   const file = inputElement.files[0];
-
   if (file) {
     // You can log the file object or its properties to the console
     console.log("Selected Image:", inputElement.files[0].name);
     // cos;
     // If you want to display the image preview, you can create a FileReader
     const reader = new FileReader();
-
     reader.onload = function (e) {
       const imagePreview = new Image();
       imagePreview.src = e.target.result;
-
       // Log the image preview to the console or append it to the DOM
       console.log("Image Preview:", imagePreview);
     };
-
     reader.readAsDataURL(file);
   } else {
     console.log("No image selected.");
   }
 }
-
 // Upload Images to Firebase //
-
 function uploadImage() {
   return new Promise((resolve, reject) => {
     const fileInput = document.getElementById("blog-img");
     const file = fileInput.files[0];
     let name = fileInput?.files[0]?.name;
-    
+
     if (file) {
-      const imageRef = storageRef(storage, `images/${name + new Date().getMilliseconds()}`);
-      
+      const imageRef = storageRef(
+        storage,
+        `images/${name + new Date().getMilliseconds()}`
+      );
+
       uploadBytes(imageRef, file)
         .then((snapshot) => getDownloadURL(snapshot.ref))
         .then((url) => {
@@ -451,7 +406,6 @@ document.getElementById("upload").addEventListener("click", function (event) {
   event.preventDefault();
   uploadImage();
 });
-
 const swiper = new Swiper(".swiper", {
   loop: true,
   slidesPerView: 1,
