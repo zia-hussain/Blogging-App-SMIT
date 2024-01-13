@@ -38,6 +38,7 @@ let heroBtn = document.getElementById("h-btn");
 let ifLoginBtn = document.querySelectorAll(".if-login");
 let nav = document.querySelector(".nav");
 let titleall;
+let viewmore = document.getElementById('viewmore')
 
 const getData = () => {
   get(child(dbRef, `UsersUid/${id}`))
@@ -57,6 +58,7 @@ const getData = () => {
           element.style.display = "block";
         });
       } else {
+        fullLoader.style.display = "none";
         title.innerHTML = "Guest";
         btn.innerHTML = "Login";
         btn.style.display = "block";
@@ -191,6 +193,7 @@ const getAllBlogs = () => {
       // Iterate over each user
       snapshot.forEach((userSnapshot) => {
         const userId = userSnapshot.key;
+
         // Get the reference to the user's blogs
         const userBlogsRef = ref(db, `BlogData/${userId}`);
         // Attach a listener to retrieve user's blog data
@@ -205,19 +208,27 @@ const getAllBlogs = () => {
             // Iterate over each blog entry for the user
             userBlogsSnapshot.forEach((blogSnapshot) => {
               const blogData = blogSnapshot.val();
-              const blogId = blogSnapshot.key; // Get the blogId
-              // Check if the blog is older than 12 hours
+              console.log("blogData", blogData);
+              const blogId = blogSnapshot.key;
+              localStorage.setItem('BlogId' , blogId)
+              // console.log(blogId);
+              // console.log(blogSnapshot)
               const currentTimestamp = new Date().getTime();
-              const twelveHoursAgo = currentTimestamp - 12 * 60 * 60 * 1000;
-              if (blogData.timestamp < twelveHoursAgo) {
-                // Blog is older than 12 hours, don't display it
+              const fiveSecondsAgo = currentTimestamp - 5 * 1000;
+              // console.log('Five Seconds Ago:', fiveSecondsAgo);
+
+              if (blogData.timestamp < fiveSecondsAgo) {
+                // Blog is older than 5 seconds, don't display it
+                //  console.log('Skipping blog entry as it is older than 5 seconds.');
                 return;
               }
+
               // Fetch additional user data
               const userRef = ref(db, `UsersUid/${userId}`);
               get(userRef).then((userSnapshot) => {
                 const userData = userSnapshot.val();
                 // Get the published date or set a default value
+                // console.log(blogData)
                 const publishedDate = blogData.publishDate || "Not Available";
                 // Create HTML elements to display the blog data
                 const blogElement = document.createElement("article");
@@ -235,8 +246,9 @@ const getAllBlogs = () => {
                     <h3 class="card__title">${blogData.titleofBlog}</h3>
                     <p class="card__excerpt">${blogData.descofBlog}</p>
                   </div>
-                  <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}">View More</a>
+                  <a class="btn" href="./viewmore.html"?blogId=${blogId}" id="viewmore">View More</a>
                 `;
+                console.log(blogId)
                 // Append the blog element to the container
                 allBlogsContainer.appendChild(blogElement);
               });
@@ -254,8 +266,8 @@ const getAllBlogs = () => {
     }
   );
 };
-// Call the function to fetch and display blogs
 getAllBlogs();
+
 // #####################3       Get All Blogs Function       ######################3
 const allBlogsArticles = document.getElementById("all-articls");
 const getBlogsForAllBLog = () => {
@@ -288,11 +300,7 @@ const getBlogsForAllBLog = () => {
             userBlogsSnapshot.forEach((blogSnapshot) => {
               const blogData = blogSnapshot.val();
               // Check if the blog is older than 24 hours
-              const currentTimestamp = new Date().getTime();
-              if (blogData.timestamp < currentTimestamp) {
-                // Blog is older than 24 hours, don't display it
-                return;
-              }
+
               // Fetch additional user data
               const userRef = ref(db, `UsersUid/${userId}`);
               get(userRef).then((userSnapshot) => {

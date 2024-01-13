@@ -1,9 +1,41 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-//   const userId = user.uid;
-  const urlParams = new URLSearchParams(window.location.search);
-  const blogId = urlParams.get('blogId');
-//   const specificBlogRef = ref(db, `BlogData/${userId}/${blogId}`);
+const firebaseConfig = {
+  apiKey: "AIzaSyBlpLk8NjMNvY3aFWvzTLp9uX_wVOX4TRY",
+  authDomain: "auth-blog-app-assignment.firebaseapp.com",
+  projectId: "auth-blog-app-assignment",
+  storageBucket: "auth-blog-app-assignment.appspot.com",
+  messagingSenderId: "939311478935",
+  appId: "1:939311478935:web:dc29fa6e41142a622651d2",
+};
 
-console.log(blogId)
+const app = initializeApp(firebaseConfig);
+const db = getDatabase();
 
-console.log(~~12.12)
+// ... (your other code)
+let id =  localStorage.getItem('blogId')
+console.log(id)
+var blogId = `${id}`;
+var blogRef = ref(db, 'blogs').child(blogId);
+
+blogRef.once('value').then(function(snapshot) {
+  var blogData = snapshot.val();
+
+  // Check if the blog exists
+  if (blogData) {
+    // Display the blog content
+    document.getElementById('blog-container').innerHTML = `
+      <h1>${blogData.title}</h1>
+      <p>${blogData.content}</p>
+    `;
+  } else {
+    // Blog not found
+    document.getElementById('blog-container').innerHTML = '<p>Blog not found</p>';
+  }
+}).catch(function(error) {
+  console.error("Error fetching blog:", error);
+});
