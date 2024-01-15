@@ -41,6 +41,7 @@ html {
   justify-content: center;
   align-items: center;
   background-color: #000;
+  /* display: none; */
 }
 .newtons-cradle {
   --uib-size: 10px;
@@ -226,12 +227,13 @@ ul li {
 }
 button {
   width: max-content;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
   border: none;
   outline: none;
   border-radius: 7px;
-  background-color: #fff;
-  color: #012d3c;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(100px);
+  color: #fff;
   font-size: 0.9rem;
   font-weight: 800;
   letter-spacing: 1px;
@@ -239,12 +241,19 @@ button {
   margin-right: 1rem;
   cursor: pointer;
   display: block;
-  transition: all 0.2s ease-in;
+  transition: all 0.1s ease-in;
   display: none;
 }
 button:hover {
-  background-color: #012d3c;
-  color: #fff;
+  background-color: #f0f0f0;
+  color: #000;
+}
+hr {
+  color: #333;
+  background-color: #fff8; /* Change to black (#000) */
+  height: 2px;
+  border: none;
+  backdrop-filter: blur(100px);
 }
 
 #menu {
@@ -533,8 +542,7 @@ textarea::-webkit-scrollbar {
 }
 #h-btn {
   margin-top: 10px;
-  background: transparent;
-  background: #012d3c;
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   color: #fff;
   display: none;
@@ -571,6 +579,8 @@ textarea::-webkit-scrollbar {
 }
 
 /*+++++++++++++++++ ================    Blogs  +++++++++*/
+
+
 .main-container {
   width: 100%;
   height: max-content;
@@ -581,7 +591,8 @@ textarea::-webkit-scrollbar {
   align-items: center;
   padding-top: 10rem;
   position: relative;
-  background-color: #333;
+  backdrop-filter: blur(150px);
+
 }
 #spinner {
   height: 80vh;
@@ -610,7 +621,8 @@ textarea::-webkit-scrollbar {
   align-items: center;
   padding-top: 10rem;
   position: relative;
-  background-color: #333;
+  /* background-color: #333; */
+  backdrop-filter: blur(100px);
 }
 
 .all-blogs {
@@ -891,6 +903,8 @@ textarea::-webkit-scrollbar {
   }
   .hero-section #desc {
     width: 60%;
+    margin-top: 2.2rem;
+    font-size: 1.2rem;
   }
   .popup {
     width: 70vw;
@@ -917,16 +931,19 @@ textarea::-webkit-scrollbar {
     width: 100%;
     font-size: 2rem;
     line-height: 45px;
+    padding-inline: 5px;
   }
   #title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     border-bottom: 1px solid #fff;
     /* text-decoration: none; */
     border: none;
+    margin-top: 1rem;
   }
   .content-over-video #desc {
     width: 95%;
     line-height: 25px;
+    margin-top: 2rem;
   }
   .nav-left h1 {
     font-size: 1.5rem;
@@ -971,6 +988,19 @@ textarea::-webkit-scrollbar {
     padding: 15px 20px;
     width: 100%;
   }
+
+     /* For Loader */
+    
+    .newtons-cradle__dot {
+      width: 20px;
+    }
+    
+    .newtons-cradle__dot::after {
+      height: 20px;
+      border-radius: 50%;
+    }
+
+    
 }
 
 @media (max-width: 400px) {

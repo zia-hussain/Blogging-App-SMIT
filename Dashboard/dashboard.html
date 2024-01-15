@@ -30,19 +30,17 @@
 
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="dasboard.css" />
-  
   </head>
 
   <body>
-
     <!-- #######3      Loader      ###### -->
     <div id="t-spinner" class="newtons-cradle">
       <div class="newtons-cradle__dot"></div>
       <div class="newtons-cradle__dot"></div>
       <div class="newtons-cradle__dot"></div>
       <div class="newtons-cradle__dot"></div>
-      </div>
-    
+    </div>
+
     <div id="full"></div>
     <section class="wrapper">
       <div class="popup" id="popup">
@@ -62,8 +60,8 @@
           <i class="fa-solid fa-image"></i>
           <i class="fa-solid fa-image view-icon" id="view-icon"></i>
           <input id="blog-img" type="file" accept="image/*" />
-          
-          <label for="blog-img"  class="file-placeholder"
+
+          <label for="blog-img" class="file-placeholder"
             >Place Your Image</label
           >
           <img id="image-preview" class="file-preview" src="#" />
@@ -127,16 +125,16 @@
         <div class="hero-section">
           <div class="h-container">
             <video class="video-background" autoplay muted loop playsinline>
-              <source src="lv_landing_v3.mp4" type="video/mp4" />
+              <source src="background.mp4" type="video/mp4" />
             </video>
             <div class="overlay-video-background"></div>
             <div class="content-over-video">
-             
               <h1 id="greeting">
-                Welcome <span id="title"></span> <span id="exclam">!</span> <br />
+                Welcome <span id="title"></span> <span id="exclam">!</span>
+                <br />
                 Explore and share your thoughts on our blogging platform.
               </h1>
-             
+
               <p id="desc">
                 Discover a space to share your stories, ideas, and passions.
                 Elevate your voice and connect with a community of creators.
@@ -192,11 +190,9 @@
             </a>
           </div>
         </div>
+            <!---  Slider------->
         <div id="all-blogs-container"></div>
-
-        <!---  Slider------->
         <div id="main-container" class="main-container">
-          
           <div id="all-blogs-head">
             <h1>Recent Blogs</h1>
           </div>
@@ -220,10 +216,11 @@
             <div id="next-btn" class="swiper-button-next"></div>
           </div>
         </div>
+        <hr>
 
         <!----Slider Khatam----->
-        
-        <!---  Slider------->
+
+        <!-- -  Slider----- -->
         <div id="all-blogs-container"></div>
         <div id="all-blogs" class="all-blogs-container">
           <div id="all-blogs-head">
@@ -245,10 +242,6 @@
             <div id="next-btn" class="swiper-button-next"></div>
           </div>
         </div>
-
-
-
-
         <!-- <div id="all-blogs" class="all-blogs-container">
           <div id="all-blogs-head">
             <h1>ALL Blogs</h1>
@@ -325,14 +318,12 @@
         popup.classList.add("open-popup");
         background.style.display = "block";
       }
-    
+
       function closePopup() {
         popup.classList.remove("open-popup");
-        
+
         background.style.display = "none";
       }
-
-
 
       //   ########## Image Preview In Input  ###########//
 
@@ -399,46 +390,6 @@
 
       // Attach click event to the view icon
       viewIcon.addEventListener("click", openModal);
-
-      // +++++++++++++++++++++    Validaton   +++++++++++++++++++  //
-
-
-      function validateForm() {
-        var topic = document.getElementById("topic").value;
-        var title = document.getElementById("titleinp").value;
-        var desc = document.getElementById("desc").value;
-        var image = document.getElementById("blog-img").value;
-
-        if (topic === "") {
-          alert("Please enter a topic");
-          return false;
-        } else if (title === "") {
-          alert("Please enter a title");
-          return false;
-        } else if (desc === "") {
-          alert("Please enter a description");
-          return false;
-        } else if (image === "") {
-          alert("Please select an image");
-          return false;
-        } else if (desc.length <= 60) {
-          alert("Description should be less than 60 characters");
-          return false;
-        } else {
-          alert("Form submitted successfully!");
-          return true;
-          closePopup();
-        }
-      }
-
-      document
-        .getElementById("upload")
-        .addEventListener("click", function (event) {
-          event.preventDefault();
-          validateForm();
-          // closePopup()
-        });
-
 
     </script>
 
