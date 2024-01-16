@@ -14,15 +14,106 @@
 body::-webkit-scrollbar {
   width: 0px;
 }
-html{
+body,
+html {
   scroll-behavior: smooth;
-}
-body {
+  width: 100%;
+  height: 100%;
+  position: relative;
   overflow-x: hidden;
   font-family: "Gilroy";
-  background-color: rgba(0, 0, 0, .5);
+  background-color: #3F3F3F;
   backdrop-filter: blur(10px);
 }
+
+
+/* //  loader */
+
+#t-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  display: none;
+}
+.newtons-cradle {
+  --uib-size: 10px;
+  --uib-speed: 1.2s;
+  --uib-color: #fff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newtons-cradle__dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 50px;
+  transform-origin: center top;
+}
+
+.newtons-cradle__dot::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--uib-color);
+}
+
+.newtons-cradle__dot:first-child {
+  animation: swing var(--uib-speed) linear infinite;
+}
+
+.newtons-cradle__dot:last-child {
+  animation: swing2 var(--uib-speed) linear infinite;
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-out;
+  }
+
+  25% {
+    transform: rotate(70deg);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: rotate(0deg);
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes swing2 {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: linear;
+  }
+
+  50% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-out;
+  }
+
+  75% {
+    transform: rotate(-70deg);
+    animation-timing-function: ease-in;
+  }
+}
+
+
 .wrapper {
   height: 100%;
   width: 100%;
@@ -89,16 +180,31 @@ body {
 }
 
 /* +++++++++++++++++++               Image Container         ++++++++++++++++++ */
-
+.main-container{
+  height: 100vh;
+  width: 100vw;
+}
+.main-container article{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 .image-container {
     margin: 1rem;
   height: 70vh;
-  width: 95%;
+  width: 97.5%;
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.image-container h1{
+  color: #fff;
+}
+
 .image-container img {
   width: 100%;
   height: 100%;
@@ -117,10 +223,9 @@ body {
   flex-direction: column;
   align-items: center;
   border: 10px solid #fff;
-
-
 }
 .container .postingDets {
+  min-width: 35vw;
   min-height: 40vh;
   position: relative;
   padding-inline: 10px;
@@ -168,4 +273,11 @@ body {
     letter-spacing: 0.5px;
     line-height: 30px;
     color: #fff;
+    min-height: 40vh;
 }
+
+
+
+
+/* // main container  */
+
