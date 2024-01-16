@@ -25,14 +25,16 @@ const firebaseConfig = {
   appId: "1:939311478935:web:dc29fa6e41142a622651d2",
 };
 
+// Firebase Varialbes
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const db = getDatabase();
 const auth = getAuth(app);
 let id = localStorage.getItem("Uid");
 const allUsersRef = ref(db, "UsersUid"); // Adjust the path according to your database structure
-
 const dbRef = ref(getDatabase());
+
+// Other Variables
 let title = document.getElementById("title");
 let btn = document.getElementById("btn");
 let heroBtn = document.getElementById("h-btn");
@@ -112,6 +114,10 @@ function addBlog() {
     closePopup();
   }
 }
+const newBlogRef = push(ref(db, "BlogData/" + userUid));
+const newBlogId = newBlogRef.key;
+console.log(newBlogRef)
+console.log(newBlogId)
 
 // Function to close the popup
 function closePopup() {

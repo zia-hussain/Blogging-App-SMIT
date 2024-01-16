@@ -737,9 +737,12 @@ textarea::-webkit-scrollbar {
 
 #prev-btn,
 #next-btn {
-  background-color: #012d3c;
-  width: 3rem;
-  height: 3rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   padding: 1.2rem;
   color: #fff;
@@ -753,15 +756,15 @@ textarea::-webkit-scrollbar {
 #next-btn::after {
   content: "⮞";
   font-size: 1.4rem;
-  left: 17px;
-  position: absolute;
+  /* left: 17px;
+  position: absolute; */
 }
 #prev-btn::after {
   content: "⮞";
   transform: rotate(180deg); /* Corrected rotation property */
-  font-size: 1.4rem;
-  position: absolute;
-  left: 14px;
+  font-size: 2rem;
+  /* position: absolute;
+  left: 14px; */
 }
 
 #all-blogs-head {
