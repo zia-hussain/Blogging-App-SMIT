@@ -549,10 +549,12 @@ textarea::-webkit-scrollbar {
   transition: all 0.2s ease-in;
   margin-inline: auto;
   padding: 1.2rem 3rem;
+  font-size: 1rem;
 }
 #h-btn:hover {
   background-color: #fff;
-  color: #012d3c;
+  color: #000;
+  font-weight: 800;
 }
 .pc_landing_main_screen-scroll-indicator {
   display: flex;
@@ -561,7 +563,6 @@ textarea::-webkit-scrollbar {
   left: 50%;
   bottom: -20px;
   transform: translate(-50%, -50%);
-
   color: #fff;
   border-radius: 50px;
   padding: 15px 23px;
@@ -569,7 +570,8 @@ textarea::-webkit-scrollbar {
   transition: all 0.1s ease-in;
 }
 .pc_landing_main_screen-scroll-indicator:hover {
-  background: #012d3c;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff8;
 }
 .pc_landing_main_screen-scroll-indicator-icon1 {
   animation: scrolldown 2s ease-in-out 0s infinite;
