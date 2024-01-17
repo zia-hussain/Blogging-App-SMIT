@@ -116,8 +116,8 @@ function addBlog() {
 }
 const newBlogRef = push(ref(db, "BlogData/" + userUid));
 const newBlogId = newBlogRef.key;
-console.log(newBlogRef)
-console.log(newBlogId)
+console.log(newBlogRef);
+console.log(newBlogId);
 
 // Function to close the popup
 function closePopup() {
@@ -227,7 +227,9 @@ const getAllBlogs = async () => {
               <h3 class="card__title">${blogData.titleofBlog}</h3>
               <p class="card__excerpt">${blogData.descofBlog}</p>
             </div>
-            <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}">View More</a>
+            <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
+
+
           `;
 
               allBlogsContainer.appendChild(blogElement);
@@ -283,7 +285,7 @@ const getBlogsForAllBLog = async () => {
               blogElement.id = blogId;
               blogElement.classList.add("article__card", "swiper-slide");
               blogElement.innerHTML = `
-            <figure class="article__image">
+            <figure class=" article__image">
               <img src="${blogData.imgUrl}" alt="" />
             </figure>
             <div class="article__content">
@@ -295,7 +297,7 @@ const getBlogsForAllBLog = async () => {
               <h3 class="card__title">${blogData.titleofBlog}</h3>
               <p class="card__excerpt">${blogData.descofBlog}</p>
             </div>
-            <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}">View More</a>
+            <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
           `;
               allBlogsArticles.appendChild(blogElement);
               console.log("Blog added to UI:", blogId);
@@ -380,19 +382,17 @@ document.getElementById("upload").addEventListener("click", function (event) {
 
 // This is for slider
 const swiper = new Swiper(".swiper", {
-  loop: false,
+  loop: true,
   slidesPerView: 1,
   spaceBetween: 10,
   grabCursor: true,
-
+  centeredSlides: true, // Center the slides
   breakpoints: {
     830: {
       slidesPerView: 2,
-      spaceBetween: 30,
     },
     550: {
       slidesPerView: 3,
-      spaceBetween: 30,
     },
   },
   navigation: {
@@ -406,9 +406,10 @@ const swiper = new Swiper(".swiper", {
     dynamicBullets: true,
   },
 });
+
 // Second //
 const swiper2 = new Swiper(".all-blogs", {
-  loop: false,
+  loop: true,
   slidesPerView: 1,
   spaceBetween: 10,
   grabCursor: true,

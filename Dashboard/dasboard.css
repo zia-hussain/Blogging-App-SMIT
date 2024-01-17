@@ -582,7 +582,6 @@ textarea::-webkit-scrollbar {
 
 /*+++++++++++++++++ ================    Blogs  +++++++++*/
 
-
 .main-container {
   width: 100%;
   height: max-content;
@@ -594,7 +593,6 @@ textarea::-webkit-scrollbar {
   padding-top: 10rem;
   position: relative;
   backdrop-filter: blur(150px);
-
 }
 #spinner {
   height: 80vh;
@@ -694,7 +692,6 @@ textarea::-webkit-scrollbar {
   color: #333;
   display: block;
   padding-left: 5px;
-
 }
 .card__title {
   margin-block: 0.8rem;
@@ -716,7 +713,6 @@ textarea::-webkit-scrollbar {
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   padding-left: 5px;
-
 }
 #viewmore {
   padding: 0.8rem 1.2rem;
@@ -734,6 +730,13 @@ textarea::-webkit-scrollbar {
 .swiper-pagination {
   height: 2rem;
 }
+.swiper-container {
+  margin: auto;
+  width: 23rem;
+}
+.swiper-slide {
+  width: 100%;
+}
 
 #prev-btn,
 #next-btn {
@@ -748,23 +751,20 @@ textarea::-webkit-scrollbar {
   color: #fff;
   transition: transform 0.1s ease-in;
 }
+#prev-btn i,
+#next-btn i {
+  font-size: 1.5rem;
+}
 #prev-btn:active,
 #next-btn:active {
   transform: scale(0.95);
 }
 
 #next-btn::after {
-  content: "⮞";
-  font-size: 1.4rem;
-  /* left: 17px;
-  position: absolute; */
+  display: none;
 }
 #prev-btn::after {
-  content: "⮞";
-  transform: rotate(180deg); /* Corrected rotation property */
-  font-size: 2rem;
-  /* position: absolute;
-  left: 14px; */
+  display: none;
 }
 
 #all-blogs-head {
@@ -921,7 +921,8 @@ textarea::-webkit-scrollbar {
     width: 20vw;
   }
   .article__card {
-    min-width: 22.5rem;
+    /* margin-left: -1rem; */
+    min-width: 23rem;
     height: 100%;
     background: #fff;
     border-radius: 1.25rem;
@@ -994,18 +995,16 @@ textarea::-webkit-scrollbar {
     width: 100%;
   }
 
-     /* For Loader */
-    
-    .newtons-cradle__dot {
-      width: 20px;
-    }
-    
-    .newtons-cradle__dot::after {
-      height: 20px;
-      border-radius: 50%;
-    }
+  /* For Loader */
 
-    
+  .newtons-cradle__dot {
+    width: 20px;
+  }
+
+  .newtons-cradle__dot::after {
+    height: 20px;
+    border-radius: 50%;
+  }
 }
 
 @media (max-width: 400px) {
