@@ -1,16 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile</title>
-    <link rel="stylesheet" href="profile.css">
-</head>
-<body>
 
-    <h1>My Profile</h1>
-    
+    <!-- */  Goole Font CDN   */    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;0,900;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- ## CSS Link ## -->
+    <link rel="stylesheet" href="profile.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <nav id="nav" class="nav">
+        <div class="nav-left">
+          <h1>Personal Blogging App</h1>
+        </div>
+        <div class="nav-right">
+          <ul id="items">
+            <a href="dashboard.html"><li id="line">Dashboard</li></a>
+            <a class="if-login" onclick="openPopup()" href="#"
+              ><li id="line">New Blog</li></a
+            >
+            <a href="#main-container"><li id="line">My Blogs</li></a>
+            <a
+              class="if-login"
+              id="user-profile"
+              href="../Profile//Profile.html"
+              target="_blank"
+              ><li id="line">My Profile</li></a
+            >
+          </ul>
 
-    <script src="profile.js"></script>
-</body>
+          <a href="#" onclick="logoutBtn()">check<button id="btn"></button></a>
+        </div>
+      </nav>
+      <div class="container">
+
+          <h1 id="title">dadas</h1>
+      </div>
+    </div>
+    <script type="module" src="profile.js"></script>
+  </body>
 </html>
