@@ -19,12 +19,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
-
-let loader = document.getElementById('t-spinner')
+let loader = document.getElementById("t-spinner");
 
 // Use DOMContentLoaded event for better performance
 window.addEventListener("DOMContentLoaded", () => {
-    loader.style.display = 'flex'
+  loader.style.display = "flex";
   auth.onAuthStateChanged((user) => {
     if (user) {
       // User is signed in
@@ -38,39 +37,46 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 // Function to fetch and display blog details
-const fetchBlogDetails = async (userUid) => {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const blogId = urlParams.get("blogId");
-  
-      // Check if blogId is present in the URL
-      if (!blogId) {
-        console.error("No blogId found in the URL");
-        // Handle this case (e.g., redirect or display an error message)
-        return;
-      }
-  
-      // Fetch the user data
-      const userRef = ref(db, `UsersUid/${userUid}`);
-      const userSnapshot = await get(userRef);
-      const userData = userSnapshot.val();
-  
-      const blogRef = ref(db, `BlogData/${userUid}/${blogId}`);
-      console.log("Blog Reference:", blogRef.toString());
-  
-      const blogSnapshot = await get(blogRef);
-  
-      setTimeout(() => {
-        if (blogSnapshot.exists()) {
-          const blogData = blogSnapshot.val();
-          
-          // Assuming allBlogsContainer is defined elsewhere in your code
-          let allBlogsContainer = document.querySelector(".main-container");
-  
-          const blogElement = document.createElement("article");
-          blogElement.innerHTML = `
+const fetchBlogDetails = async () => {
+  try {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    // Get the values of the parameters
+    const blogId = urlParams.get("blogId");
+    const userId = urlParams.get("userId");
+
+    // Now you can use these values as needed
+    console.log("Blog ID:", blogId);
+    console.log("User ID:", userId);
+
+    // Check if blogId is present in the URL
+    if (!blogId) {
+      console.error("No blogId found in the URL");
+      // Handle this case (e.g., redirect or display an error message)
+      return;
+    }
+
+    // Fetch the user data
+    const userRef = ref(db, `UsersUid/${userId}`);
+    const userSnapshot = await get(userRef);
+    const userData = userSnapshot.val();
+
+    const blogRef = ref(db, `BlogData/${userId}/${blogId}`);
+    console.log("Blog Reference:", blogRef.toString());
+
+    const blogSnapshot = await get(blogRef);
+    console.log(blogSnapshot);
+    setTimeout(() => {
+      if (blogSnapshot.exists()) {
+        const blogData = blogSnapshot.val();
+
+        // Assuming allBlogsContainer is defined elsewhere in your code
+        let allBlogsContainer = document.querySelector(".main-container");
+
+        const blogElement = document.createElement("article");
+        blogElement.innerHTML = `
     <div class="image-container">
       <img id="img" src="${blogData.imgUrl}" alt="" />
     </div>
@@ -79,19 +85,25 @@ const fetchBlogDetails = async (userUid) => {
         <span id="title">${blogData.titleofBlog}</span>
         <p class="author">By: <span id="author">${userData.nameofuser}</span></p>
         <p class="date">Published on: <span id="date">${blogData.publishDate}</span></p>
+
       </div>
-      <div class="desc" id="desc">${blogData.descofBlog}</div>
+      <span class="desc-head">
+      <h1>Description : <i class="fa-solid fa-arrow-down"></i></h1>
+    </span>
+      <div class="desc" id="desc">
+      
+      ${blogData.descofBlog}</div>
     </div>
   `;
-  
-          allBlogsContainer.appendChild(blogElement);
-        } else {
-          console.error("Blog not found");
-        }
-    loader.style.display = 'none'
-      }, 3000);
-    } catch (error) {
-      console.error("Error fetching blog data:", error);
-    }
-  };
-  
+
+        allBlogsContainer.appendChild(blogElement);
+      } else {
+        console.error("Blog not found");
+      }
+      loader.style.display = "none";
+    }, 3000);
+  } catch (error) {
+    console.error("Error fetching blog data:", error);
+  }
+};
+// fetchBlogDetails();
