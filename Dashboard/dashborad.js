@@ -264,12 +264,14 @@ const getBlogsForAllBLog = async () => {
     const allUsersRef = ref(db, "UsersUid"); // Assuming 'UsersUid' is the path to your users data
     const usersSnapshot = await get(allUsersRef);
     // Clear existing content in the container
-    notFoundCon.style.display = "none";
+    // notFoundCon.style.display = "none";
     allBlogsArticles.innerHTML = "";
-    if (!usersSnapshot.exists()) {
-      notFoundCon.style.display = "flex";
-      return;
-    }
+    // if (!usersSnapshot.exists()) {
+    //   notFoundCon.style.display = "flex";
+    //   return;
+    // } else {
+    //   notFoundCon.style.display = "none";
+    // }
     const userPromises = Object.entries(usersSnapshot.val()).map(
       async ([userId, _]) => {
         const userBlogsRef = ref(db, `BlogData/${userId}`);

@@ -133,6 +133,7 @@ let SignInUser = (e) => {
     })
     .catch((error) => {
       alert("Please Insert Correct Credential");
+      if(!email)
       forgot.style.display = "block";
       console.log(error);
     });
