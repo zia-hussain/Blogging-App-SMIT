@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="profile.css" />
   </head>
   <body>
+    <div id="t-spinner" class="newtons-cradle">
+      <div class="newtons-cradle__dot"></div>
+      <div class="newtons-cradle__dot"></div>
+      <div class="newtons-cradle__dot"></div>
+      <div class="newtons-cradle__dot"></div>
+    </div>
+
     <div class="wrapper">
       <nav id="nav" class="nav">
         <div class="nav-left">
@@ -32,9 +39,7 @@
             <a href=".././Dashboard/dashboard.html"
               ><li id="line">Dashboard</li></a
             >
-            <a class="if-login" href="#"
-              ><li id="line">New Blog</li></a
-            >
+            <a class="if-login" href="#"><li id="line">New Blog</li></a>
             <a href="#main-container"><li id="line">My Blogs</li></a>
             <a
               class="if-login"
@@ -54,11 +59,12 @@
             <input type="file" id="file" />
             <label for="file" id="uploadBtn">Add Profile</label>
           </div>
+          <button id="upload">lala</button>
         </div>
         <div class="hero-right">
           <div class="title">
             <h1 id="title"></h1>
-              <i id="edit" class="fa-regular fa-pen-to-square"></i>
+            <i id="edit" class="fa-regular fa-pen-to-square"></i>
           </div>
           <div id="dets">
             <p>Acc Created:<span id="created">10/29/2202</span></p>

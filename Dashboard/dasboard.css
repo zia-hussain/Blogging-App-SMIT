@@ -791,6 +791,8 @@ textarea::-webkit-scrollbar {
   align-items: center;
   flex-direction: column;
   gap: 2rem;
+  position: absolute;
+  z-index: 9999;
   /* display: none; */
 }
 #not-found-text {
