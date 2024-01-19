@@ -117,7 +117,6 @@ function addBlog() {
 const newBlogRef = push(ref(db, "BlogData/" + userUid));
 const newBlogId = newBlogRef.key;
 console.log(newBlogRef);
-console.log(newBlogId);
 
 // Function to close the popup
 function closePopup() {
@@ -233,7 +232,7 @@ const getAllBlogs = async () => {
           `;
 
               allBlogsContainer.appendChild(blogElement);
-              console.log("Blog added to UI:", blogId);
+              console.log("Blog added to Recent UI:", blogId);
             }
           );
 
@@ -302,7 +301,7 @@ const getBlogsForAllBLog = async () => {
             <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
           `;
               allBlogsArticles.appendChild(blogElement);
-              console.log("Blog added to UI:", blogId);
+              console.log("Blog added to All Blog UI:", blogId);
             }
           );
           // Wait for all blog data promises to resolve before continuing to the next user
@@ -383,61 +382,63 @@ document.getElementById("upload").addEventListener("click", function (event) {
 });
 
 // This is for slider
-const swiper = new Swiper(".swiper", {
-  loop: true,
-  slidesPerView: 1,
-  spaceBetween: 10,
-  grabCursor: true,
-  centeredSlides: true, // Center the slides
-  breakpoints: {
-    830: {
-      slidesPerView: 2,
-    },
-    550: {
-      slidesPerView: 3,
-    },
-  },
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
-  pagination: {
-    el: ".swiper-pagination",
-    type: "bullets",
-    clickable: true,
-    dynamicBullets: true,
-  },
-});
-
-// Second //
-const swiper2 = new Swiper(".all-blogs", {
-  loop: true,
-  slidesPerView: 1,
-  spaceBetween: 10,
-  grabCursor: true,
-
-  breakpoints: {
-    830: {
-      slidesPerView: 2,
-      spaceBetween: 30,
-    },
-    550: {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      coverflowEffect: {
-        rotate: 10,
-        slideShadows: true,
+document.addEventListener("DOMContentLoaded", function () {
+  const swiper = new Swiper(".swiper", {
+    loop: true,
+    slidesPerView: 1,
+    spaceBetween: 10,
+    grabCursor: true,
+    // centeredSlides: true, // Center the slides
+    breakpoints: {
+      830: {
+        slidesPerView: 2,
+      },
+      550: {
+        slidesPerView: 3,
       },
     },
-  },
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
-  pagination: {
-    el: ".swiper-pagination",
-    type: "bullets",
-    clickable: true,
-    dynamicBullets: true,
-  },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      type: "bullets",
+      clickable: true,
+      dynamicBullets: true,
+    },
+  });
+
+  // Second //
+  const swiper2 = new Swiper(".all-blogs", {
+    loop: true,
+    slidesPerView: 1,
+    spaceBetween: 10,
+    grabCursor: true,
+
+    breakpoints: {
+      830: {
+        slidesPerView: 2,
+        spaceBetween: 30,
+      },
+      550: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        coverflowEffect: {
+          rotate: 10,
+          slideShadows: true,
+        },
+      },
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      type: "bullets",
+      clickable: true,
+      dynamicBullets: true,
+    },
+  });
 });
