@@ -227,8 +227,6 @@ const getAllBlogs = async () => {
               <p class="card__excerpt">${blogData.descofBlog}</p>
             </div>
             <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
-
-
           `;
 
               allBlogsContainer.appendChild(blogElement);

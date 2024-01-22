@@ -22,6 +22,22 @@
     <link rel="stylesheet" href="profile.css" />
   </head>
   <body>
+    <div class="full"></div>
+
+    <div class="popup" id="popup">
+      <i onclick="closePopup()" id="close" class="fa-solid fa-times"></i>
+      <h1>Deleting Confirmation</h1>
+      <p>Do You Want To Delete This ?</p>
+      <div class="input-field">
+        <i class="fa-solid fa-lock"></i>
+        <input id="c-pass" type="password" placeholder="Insert password" />
+      </div>
+      <div id="btns">
+        <a id="cancel" onclick="closePopup()" href="#">Cancel</a>
+        <a id="delete" href="#">Delete</a>
+      </div>
+    </div>
+
     <div id="t-spinner" class="newtons-cradle">
       <div class="newtons-cradle__dot"></div>
       <div class="newtons-cradle__dot"></div>
@@ -30,6 +46,7 @@
     </div>
 
     <div class="wrapper">
+      <!---Start Here !---->
       <nav id="nav" class="nav">
         <div class="nav-left">
           <h1>Personal Blogging App</h1>
@@ -41,15 +58,8 @@
             >
             <a class="if-login" href="#"><li id="line">New Blog</li></a>
             <a href="#main-container"><li id="line">My Blogs</li></a>
-            <a
-              class="if-login"
-              id="user-profile"
-              href="../Profile//Profile.html"
-              target="_blank"
-              ><li id="line">My Profile</li></a
-            >
           </ul>
-          <a href="#" onclick="logoutBtn()"><button id="btn">check</button></a>
+          <a href="#" onclick="logoutBtn()"><button id="btn">Logout</button></a>
         </div>
       </nav>
       <div class="hero-sec">
@@ -59,7 +69,7 @@
             <input type="file" id="file" />
             <label for="file" id="uploadBtn">Add Profile</label>
           </div>
-          <button id="upload">lala</button>
+          <button id="upload">Update</button>
         </div>
         <div class="hero-right">
           <div class="title">
@@ -67,7 +77,14 @@
             <i id="edit" class="fa-regular fa-pen-to-square"></i>
           </div>
           <div id="dets">
-            <p>Acc Created:<span id="created">10/29/2202</span></p>
+            <p id="para1">Acc Created:<span id="created">10/29/2202</span></p>
+            <!-- Add this line wherever you want to give users the option to delete their account -->
+            <p id="para2">
+              Want to delete your account?
+              <a href="#" onclick="openPopup()" id="deleteAccountButton"
+                >Delete Account</a
+              >
+            </p>
           </div>
         </div>
       </div>
@@ -99,6 +116,30 @@
         </div>
       </div>
     </div>
+    <script>
+      function logoutBtn() {
+        window.location.href = "/index.html";
+      }
+      // close popup
+
+      let background = document.getElementById("full");
+      let popup = document.getElementById("popup");
+
+      function openPopup() {
+        const popup = document.getElementById("myPopup");
+        if (popup) {
+          popup.style.display = "block";
+        } else {
+          console.error("Popup element not found");
+        }
+      }
+
+      function closePopup() {
+        popup.classList.remove("open-popup");
+
+        background.style.display = "none";
+      }
+    </script>
     <script type="module" src="profile.js"></script>
   </body>
 </html>
