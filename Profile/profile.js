@@ -217,18 +217,41 @@ document
     }
   });
 
-  
+let pass = document.getElementById("c-pass");
 async function signout() {
   try {
     const user = auth.currentUser;
 
     if (user) {
-      await remove(ref(db, `UsersUid/${user.uid}`));
-      await deleteUserBlogData(user.uid);
-      await user.delete();
+      // Get the entered password from the input field
+      const enteredPassword = pass.value;
 
-      alert("Done Man");
-      location.replace("/index.html");
+      // Check if the user provided a password
+      if (enteredPassword) {
+        // Reauthenticate user before deleting the account
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          enteredPassword
+        );
+
+        try {
+          await reauthenticateWithCredential(user, credential);
+
+          // Now, the user is reauthenticated, proceed with account deletion
+          await remove(ref(db, `UsersUid/${user.uid}`));
+          await deleteUserBlogData(user.uid);
+          await user.delete();
+
+          alert("Done Man");
+          location.replace("/index.html");
+        } catch (reauthError) {
+          // Handle reauthentication error
+          console.error("Error during reauthentication:", reauthError);
+          alert("Incorrect password. Please try again.");
+        }
+      } else {
+        alert("You must provide your current password to sign out.");
+      }
     } else {
       alert("User is not signed in.");
     }
@@ -237,6 +260,7 @@ async function signout() {
     alert("Error during signout. Please check the console for details.");
   }
 }
+deleteBtn.addEventListener("click", signout);
 
 async function deleteUserBlogData(userId) {
   try {

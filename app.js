@@ -124,19 +124,20 @@ let SignInUser = (e) => {
   e.preventDefault();
 
   signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((credential) => {
-      console.log(credential);
-      localStorage.setItem("Uid", credential.user.uid);
-      window.open("./Dashboard/dashboard.html", "_blank");
-      email.value = "";
-      password.value = "";
-    })
-    .catch((error) => {
-      alert("Please Insert Correct Credential");
-      if(!email)
+  .then((credential) => {
+    console.log("Sign-in successful", credential);
+    localStorage.setItem("Uid", credential.user.uid);
+    window.open("./Dashboard/dashboard.html", "_blank");
+    email.value = "";
+    password.value = "";
+  })
+  .catch((error) => {
+    console.error("Sign-in error:", error);
+    alert("Please Insert Correct Credential");
+    if (!email) {
       forgot.style.display = "block";
-      console.log(error);
-    });
+    }
+  });
 };
 signInForm.addEventListener("click", SignInUser);
 

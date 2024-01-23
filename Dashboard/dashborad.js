@@ -42,7 +42,7 @@ let ifLoginBtn = document.querySelectorAll(".if-login");
 let nav = document.querySelector(".nav");
 let titleall;
 let viewmore = document.getElementById("viewmore");
-let notFoundCon = document.querySelector(".not-found-container");
+// let notFoundCon = document.querySelector(".not-found-container");
 
 // Function to get user data from the database
 const getUserData = async () => {
@@ -98,20 +98,28 @@ let publishDate = document.getElementById("pb-date");
 let genreInp = document.getElementById("topic");
 let bTitleInp = document.getElementById("titleinp");
 let descInp = document.getElementById("desc");
+let blogImg = document.getElementById("blog-img");
+
 let uploadBtn = document.getElementById("upload");
 let userUid = localStorage.getItem("Uid");
 const show = document.getElementById("blogshow");
-const loaderContainer = document.getElementById("spinner");
+// const loaderContainer = document.getElementById("spinner");
 const fullLoader = document.getElementById("t-spinner");
 let body = document.body;
 
 // Function to add a new blog post
 function addBlog() {
-  if (genreInp.value === "" || bTitleInp.value === "" || descInp.value === "") {
+  if (
+    genreInp.value === "" ||
+    bTitleInp.value === "" ||
+    descInp.value === "" ||
+    blogImg.value === ""
+  ) {
     alert("Please fill in all fields.");
   } else {
     addData();
     closePopup();
+    closemenu();
   }
 }
 const newBlogRef = push(ref(db, "BlogData/" + userUid));
@@ -129,7 +137,7 @@ function closemenu() {
   if (window.innerWidth <= 1100) {
     hide.style.display = "none";
     items.style.left = "-35vh";
-    show.style.display = "block";
+    // show.style.display = "block";
   }
 }
 uploadBtn.addEventListener("click", addBlog);
@@ -175,45 +183,34 @@ let addData = () => {
 
 // This is for getting blog data for recents Blogs Section
 const allBlogsContainer = document.getElementById("articls");
+const recentnotFoundCon = document.getElementById("recent-not-found");
 const getAllBlogs = async () => {
   try {
-    const usersSnapshot = await get(child(dbRef, "UsersUid")); // Assuming 'UsersUid' is the path to your users data
+    const usersSnapshot = await get(child(dbRef, "UsersUid"));
 
-    // Clear existing content in the container
-    notFoundCon.innerHTML = "";
-    allBlogsContainer.innerHTML = "";
+    // Set initial value of blogsFound to false
+    let blogsFound = false;
 
-    if (!usersSnapshot.exists()) {
-      notFoundCon.style.display = "flex";
-      if (allBlogsContainer) {
-        allBlogsContainer.style.display = "none";
-      }
-      return;
-    } else {
-      notFoundCon.style.display = "none";
-      if (allBlogsContainer) {
-        allBlogsContainer.style.display = "flex";
-      }
-    }
+    // Loop through users
+    for (const [userId, user] of Object.entries(usersSnapshot.val())) {
+      const userBlogsRef = ref(db, `BlogData/${userId}`);
+      const userBlogsSnapshot = await get(userBlogsRef);
 
-    const userPromises = Object.entries(usersSnapshot.val()).map(
-      async ([userId, user]) => {
-        const userBlogsRef = ref(db, `BlogData/${userId}`);
-        const userBlogsSnapshot = await get(userBlogsRef);
+      // Check if user has blogs
+      if (userBlogsSnapshot.exists()) {
+        // Loop through blogs
+        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+          // Process blog data and add to UI
+          const userRef = ref(db, `UsersUid/${userId}`);
+          const userSnapshot = await get(userRef);
+          const userData = userSnapshot.val();
 
-        if (userBlogsSnapshot.exists()) {
-          const blogPromises = Object.entries(userBlogsSnapshot.val()).map(
-            async ([blogId, blogData]) => {
-              const userRef = ref(db, `UsersUid/${userId}`);
-              const userSnapshot = await get(userRef);
-              const userData = userSnapshot.val(); // You may need to adjust this based on your data structure
+          const publishedDate = blogData.publishDate || "Not Available";
 
-              const publishedDate = blogData.publishDate || "Not Available";
-
-              const blogElement = document.createElement("article");
-              blogElement.id = blogId;
-              blogElement.classList.add("article__card", "swiper-slide");
-              blogElement.innerHTML = `
+          const blogElement = document.createElement("article");
+          blogElement.id = blogId;
+          blogElement.classList.add("article__card", "swiper-slide");
+          blogElement.innerHTML = `
             <figure class="article__image">
               <img src="${blogData.imgUrl}" alt="" />
             </figure>
@@ -229,62 +226,57 @@ const getAllBlogs = async () => {
             <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
           `;
 
-              allBlogsContainer.appendChild(blogElement);
-              console.log("Blog added to Recent UI:", blogId);
-            }
-          );
+          allBlogsContainer.appendChild(blogElement);
 
-          // Wait for all blog data promises to resolve before continuing to the next user
-          await Promise.all(blogPromises);
+          // Set blogsFound to true since at least one blog is found
+          blogsFound = true;
         }
       }
-    );
+    }
 
-    // Wait for all user data promises to resolve before finishing
-    await Promise.all(userPromises);
-
-    // Hide loader after everything is loaded
-    loaderContainer.style.display = "none";
+    // Display the notFoundCon only if no blogs are found
+    recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
   } catch (error) {
     console.error("Error fetching data:", error);
-    loaderContainer.style.display = "none";
+    // Handle errors if needed
   }
 };
 window.addEventListener("load", () => {
   getAllBlogs();
 });
 
+
 // This is for getting blog data for ALL Blogs Section
 const allBlogsArticles = document.getElementById("all-articls");
+const allNotFoundCon = document.getElementById("all-not-found");
 const getBlogsForAllBLog = async () => {
   try {
-    const allUsersRef = ref(db, "UsersUid"); // Assuming 'UsersUid' is the path to your users data
-    const usersSnapshot = await get(allUsersRef);
-    // Clear existing content in the container
-    // notFoundCon.style.display = "none";
-    allBlogsArticles.innerHTML = "";
-    // if (!usersSnapshot.exists()) {
-    //   notFoundCon.style.display = "flex";
-    //   return;
-    // } else {
-    //   notFoundCon.style.display = "none";
-    // }
-    const userPromises = Object.entries(usersSnapshot.val()).map(
-      async ([userId, _]) => {
-        const userBlogsRef = ref(db, `BlogData/${userId}`);
-        const userBlogsSnapshot = await get(userBlogsRef);
-        if (userBlogsSnapshot.exists()) {
-          const blogPromises = Object.entries(userBlogsSnapshot.val()).map(
-            async ([blogId, blogData]) => {
-              const userRef = ref(db, `UsersUid/${userId}`);
-              const userSnapshot = await get(userRef);
-              const userData = userSnapshot.val(); // You may need to adjust this based on your data structure
-              const publishedDate = blogData.publishDate || "Not Available";
-              const blogElement = document.createElement("article");
-              blogElement.id = blogId;
-              blogElement.classList.add("article__card", "swiper-slide");
-              blogElement.innerHTML = `
-            <figure class=" article__image">
+    const usersSnapshot = await get(child(dbRef, "UsersUid"));
+
+    // Set initial value of blogsFound to false
+    let blogsFound = false;
+
+    // Loop through users
+    for (const [userId, user] of Object.entries(usersSnapshot.val())) {
+      const userBlogsRef = ref(db, `BlogData/${userId}`);
+      const userBlogsSnapshot = await get(userBlogsRef);
+
+      // Check if user has blogs
+      if (userBlogsSnapshot.exists()) {
+        // Loop through blogs
+        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+          // Process blog data and add to UI
+          const userRef = ref(db, `UsersUid/${userId}`);
+          const userSnapshot = await get(userRef);
+          const userData = userSnapshot.val();
+
+          const publishedDate = blogData.publishDate || "Not Available";
+
+          const blogElement = document.createElement("article");
+          blogElement.id = blogId;
+          blogElement.classList.add("article__card", "swiper-slide");
+          blogElement.innerHTML = `
+            <figure class="article__image">
               <img src="${blogData.imgUrl}" alt="" />
             </figure>
             <div class="article__content">
@@ -298,30 +290,28 @@ const getBlogsForAllBLog = async () => {
             </div>
             <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
           `;
-              allBlogsArticles.appendChild(blogElement);
-              console.log("Blog added to All Blog UI:", blogId);
-            }
-          );
-          // Wait for all blog data promises to resolve before continuing to the next user
-          await Promise.all(blogPromises);
+
+          allBlogsArticles.appendChild(blogElement);
+
+          // Set blogsFound to true since at least one blog is found
+          blogsFound = true;
         }
       }
-    );
+    }
 
-    // Wait for all user data promises to resolve before finishing
-    await Promise.all(userPromises);
-
-    // Hide loader after everything is loaded
+    // Display the notFoundCon only if no blogs are found
+    allNotFoundCon.style.display = blogsFound ? "none" : "flex";
   } catch (error) {
     console.error("Error fetching data:", error);
+    // Handle errors if needed
   }
 };
 window.addEventListener("load", () => {
   getBlogsForAllBLog();
 });
 
+
 // Function to handle when a new image is selected
-let blogImg = document.getElementById("blog-img");
 blogImg.onchange = function () {
   handleImageUpload();
 };

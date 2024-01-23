@@ -341,6 +341,17 @@ textarea::-webkit-scrollbar {
   display: none;
   /* Hide the original file input */
 }
+.file-placeholder {
+  border: 1px solid #acacac;
+  overflow-y: scroll;
+  text-align: start;
+  max-width: 130px;
+  max-height: 100%;
+  text-overflow: ellipsis;
+}
+.file-placeholder::-webkit-scrollbar {
+  width: 0px;
+}
 .file-preview {
   position: absolute;
   right: 15%;
@@ -783,16 +794,17 @@ textarea::-webkit-scrollbar {
   align-items: center;
 }
 .not-found-container {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   /* background-color: #000; */
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 2rem;
-  position: absolute;
-  z-index: 9999;
+  /* position: absolute; */
+  /* z-index: 9999; */
   /* display: none; */
 }
 #not-found-text {

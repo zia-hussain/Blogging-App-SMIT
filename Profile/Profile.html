@@ -126,19 +126,16 @@
       let popup = document.getElementById("popup");
 
       function openPopup() {
-        const popup = document.getElementById("myPopup");
-        if (popup) {
-          popup.style.display = "block";
-        } else {
-          console.error("Popup element not found");
-        }
+        popup.classList.add("open-popup");
+        // background.style.display = "block";
       }
 
       function closePopup() {
         popup.classList.remove("open-popup");
 
-        background.style.display = "none";
+        // background.style.display = "none";
       }
+
     </script>
     <script type="module" src="profile.js"></script>
   </body>
