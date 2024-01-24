@@ -275,3 +275,120 @@ async function deleteUserBlogData(userId) {
 
 // Assuming you have a button with id "deleteBtn" in your HTML
 deleteBtn.addEventListener("click", signout);
+
+const allBlogsContainer = document.getElementById("articls");
+
+const getAllBlogs = async () => {
+  try {
+    const usersSnapshot = await get(child(dbRef, "UsersUid"));
+
+    // Set initial value of blogsFound to false
+    let blogsFound = false;
+
+    // Loop through users
+    for (const [userId, user] of Object.entries(usersSnapshot.val())) {
+      const userBlogsRef = ref(db, `BlogData/${userId}`);
+      const userBlogsSnapshot = await get(userBlogsRef);
+
+      // Check if user has blogs
+      if (userBlogsSnapshot.exists()) {
+        // Loop through blogs
+        for (const [blogId, blogData] of Object.entries(
+          userBlogsSnapshot.val()
+        )) {
+          // Process blog data and add to UI
+          const userRef = ref(db, `UsersUid/${userId}`);
+          const userSnapshot = await get(userRef);
+          const userData = userSnapshot.val();
+
+          const publishedDate = blogData.publishDate || "Not Available";
+
+          const blogElement = document.createElement("article");
+          blogElement.id = blogId;
+          console.log(blogId);
+          blogElement.classList.add("article__card", "swiper-slide");
+          blogElement.innerHTML = `
+            <div class="card card1" data-blogid="${blogId}">
+              <div class="container">
+                <img src="${blogData.imgUrl}" alt="Image 1">
+              </div>
+              <div class="details">
+                <span class="postingInfo">
+                  <span class="author">Author: ${userData.nameofuser} </span>
+                  <span class="pb-date">Published on: ${publishedDate}</span>
+                </span>
+                <span id="genre">${blogData.genreofBlog}</span>
+                <h3 id="title">${blogData.titleofBlog}</h3>
+                <p id="desc">${blogData.descofBlog}</p>
+                <div id="btns">
+                  <div class="first-btn">
+                    <a class="btn" id="viewmore" href="/Dashboard/viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
+                  </div>
+                  <div class="second-btn">
+                    <i class="fa-regular fa-trash-can"></i>
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          allBlogsContainer.appendChild(blogElement);
+          const trashIcon = blogElement.querySelector(".fa-trash-can");
+          trashIcon.addEventListener("click", () => delTask(blogId));
+
+          // Set blogsFound to true since at least one blog is found
+          blogsFound = true;
+        }
+      }
+    }
+
+    // Display the notFoundCon only if no blogs are found
+    // recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    // Handle errors if needed
+  }
+};
+window.addEventListener("load", () => {
+  getAllBlogs();
+});
+
+//  for deleting blogs
+
+// Function to delete a blog post
+function delTask(blogId) {
+  // try {
+  const user = auth.currentUser;
+  console.log(auth.currentUser);
+
+  if (user) {
+    const userId = user.uid;
+    console.log(blogId);
+    // const blogDataRef = ref(db, `BlogData/${userId}/${blogId}`);
+    remove(ref(db, `BlogData/${userId}/${blogId}`))
+      .then((res) => {
+        console.log("data removed successfully", res);
+      })
+      .catch((error) => {
+        alert("error" + error);
+      });
+  }
+  //     await remove(blogDataRef)
+  //       .then((result) => {
+  //         console.log(result);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+
+  //     // Reload the page or update the UI as needed
+  //     // location.reload();
+  //   } else {
+  //     alert("User is not signed in.");
+  //   }
+  // } catch (error) {
+  //   console.error("Error during blog deletion:", error);
+  //   alert("Error deleting blog. Please check the console for details.");
+  // }
+}

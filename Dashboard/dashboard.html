@@ -286,43 +286,43 @@
 
       //   ########## Image Preview In Input  ###########//
 
-      document
-        .getElementById("blog-img")
-        .addEventListener("change", function () {
-          var input = this;
-          var label = input.nextElementSibling;
+      // document
+      //   .getElementById("blog-img")
+      //   .addEventListener("change", function () {
+      //     var input = this;
+      //     var label = input.nextElementSibling;
 
-          if (input.files.length > 0) {
-            var fileType = input.files[0].type;
+      //     if (input.files.length > 0) {
+      //       var fileType = input.files[0].type;
 
-            if (!fileType.startsWith("image/")) {
-              // Clear the selected file if it's not an image
-              input.value = "";
-              label.textContent = "Place Your Image";
-              preview.src = "";
-              viewIcon.style.display = "none";
-              alert("Please select an image file.");
-              return;
-            }
+      //       if (!fileType.startsWith("image/")) {
+      //         // Clear the selected file if it's not an image
+      //         input.value = "";
+      //         label.textContent = "Place Your Image";
+      //         preview.src = "";
+      //         viewIcon.style.display = "none";
+      //         alert("Please select an image file.");
+      //         return;
+      //       }
 
-            // Display image preview
-            var reader = new FileReader();
-            reader.onload = function (e) {
-              preview.src = e.target.result;
-              viewIcon.style.display = "block";
-              previewIcon.style.display = "block";
-            };
-            reader.readAsDataURL(input.files[0]);
+      //       // Display image preview
+      //       var reader = new FileReader();
+      //       reader.onload = function (e) {
+      //         preview.src = e.target.result;
+      //         viewIcon.style.display = "block";
+      //         previewIcon.style.display = "block";
+      //       };
+      //       reader.readAsDataURL(input.files[0]);
 
-            var fileName = input.files[0].name;
-            label.textContent = fileName;
-          } else {
-            // Clear the preview and label if no file is selected
-            preview.src = "";
-            label.textContent = "Place Your Image";
-            viewIcon.style.display = "none";
-          }
-        });
+      //       var fileName = input.files[0].name;
+      //       label.textContent = fileName;
+      //     } else {
+      //       // Clear the preview and label if no file is selected
+      //       preview.src = "";
+      //       label.textContent = "Place Your Image";
+      //       viewIcon.style.display = "none";
+      //     }
+      //   });
 
       // Function to open the modal and display the full image
       function openModal() {

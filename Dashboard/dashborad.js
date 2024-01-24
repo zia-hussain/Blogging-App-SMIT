@@ -44,6 +44,50 @@ let titleall;
 let viewmore = document.getElementById("viewmore");
 // let notFoundCon = document.querySelector(".not-found-container");
 
+// #######################    For image preview in the input    ############
+
+
+document
+.getElementById("blog-img")
+.addEventListener("change", function () {
+  var input = this;
+  var label = input.nextElementSibling;
+
+  if (input.files.length > 0) {
+    var fileType = input.files[0].type;
+
+    if (!fileType.startsWith("image/")) {
+      // Clear the selected file if it's not an image
+      input.value = "";
+      label.textContent = "Place Your Image";
+      preview.src = "";
+      viewIcon.style.display = "none";
+      alert("Please select an image file.");
+      return;
+    }
+
+    // Display image preview
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      viewIcon.style.display = "block";
+      previewIcon.style.display = "block";
+    };
+    reader.readAsDataURL(input.files[0]);
+
+    var fileName = input.files[0].name;
+    label.textContent = fileName;
+  } else {
+    // Clear the preview and label if no file is selected
+    preview.src = "";
+    label.textContent = "Place Your Image";
+    viewIcon.style.display = "none";
+  }
+});
+
+
+
+
 // Function to get user data from the database
 const getUserData = async () => {
   try {
@@ -108,6 +152,13 @@ const fullLoader = document.getElementById("t-spinner");
 let body = document.body;
 
 // Function to add a new blog post
+function emptyFields() {
+  genreInp.value = "";
+  bTitleInp.value = "";
+  descInp.value = "";
+  blogImg.value = "";
+  console.log("runing empty", blogImg.files[0]);
+}
 function addBlog() {
   if (
     genreInp.value === "" ||
@@ -118,8 +169,10 @@ function addBlog() {
     alert("Please fill in all fields.");
   } else {
     addData();
+    emptyFields();
     closePopup();
     closemenu();
+    console.log(blogImg.value);
   }
 }
 const newBlogRef = push(ref(db, "BlogData/" + userUid));
@@ -176,9 +229,11 @@ let addData = () => {
           getAllBlogs();
           getBlogsForAllBLog();
         })
-        .catch((err) => {});
+        .catch((err) => {
+        });
     })
-    .catch((err) => {});
+    .catch((err) => {
+    });
 };
 
 // This is for getting blog data for recents Blogs Section
@@ -199,7 +254,9 @@ const getAllBlogs = async () => {
       // Check if user has blogs
       if (userBlogsSnapshot.exists()) {
         // Loop through blogs
-        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+        for (const [blogId, blogData] of Object.entries(
+          userBlogsSnapshot.val()
+        )) {
           // Process blog data and add to UI
           const userRef = ref(db, `UsersUid/${userId}`);
           const userSnapshot = await get(userRef);
@@ -245,7 +302,6 @@ window.addEventListener("load", () => {
   getAllBlogs();
 });
 
-
 // This is for getting blog data for ALL Blogs Section
 const allBlogsArticles = document.getElementById("all-articls");
 const allNotFoundCon = document.getElementById("all-not-found");
@@ -264,7 +320,9 @@ const getBlogsForAllBLog = async () => {
       // Check if user has blogs
       if (userBlogsSnapshot.exists()) {
         // Loop through blogs
-        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+        for (const [blogId, blogData] of Object.entries(
+          userBlogsSnapshot.val()
+        )) {
           // Process blog data and add to UI
           const userRef = ref(db, `UsersUid/${userId}`);
           const userSnapshot = await get(userRef);
@@ -309,7 +367,6 @@ const getBlogsForAllBLog = async () => {
 window.addEventListener("load", () => {
   getBlogsForAllBLog();
 });
-
 
 // Function to handle when a new image is selected
 blogImg.onchange = function () {

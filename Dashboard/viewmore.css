@@ -228,6 +228,7 @@ html {
   border: 10px solid #fff;
 }
 .container .postingDets {
+  text-transform: capitalize;
   min-width: 35%;
   min-height: 40vh;
   position: relative;
@@ -244,6 +245,7 @@ html {
   border: 5px solid #fff;
 }
 .container .postingDets #title {
+  text-transform: capitalize;
   height: max-content;
   width: max-content;
   max-width: 93vw;
@@ -276,6 +278,7 @@ html {
 }
 
 .desc {
+  text-transform: capitalize;
   width: 100%;
   padding: 1rem;
   font-size: 1.2rem;
