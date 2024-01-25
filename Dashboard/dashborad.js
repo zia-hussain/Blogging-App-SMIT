@@ -46,10 +46,7 @@ let viewmore = document.getElementById("viewmore");
 
 // #######################    For image preview in the input    ############
 
-
-document
-.getElementById("blog-img")
-.addEventListener("change", function () {
+document.getElementById("blog-img").addEventListener("change", function () {
   var input = this;
   var label = input.nextElementSibling;
 
@@ -85,9 +82,6 @@ document
   }
 });
 
-
-
-
 // Function to get user data from the database
 const getUserData = async () => {
   try {
@@ -118,7 +112,6 @@ const updateUI = (userName) => {
   heroBtn.innerHTML = userName !== "Guest" ? "My Profile" : "Be a Member!";
   btn.style.display = "block";
   heroBtn.style.display = "block";
-  fullLoader.style.display = "none";
 };
 getUserData();
 
@@ -152,13 +145,12 @@ const fullLoader = document.getElementById("t-spinner");
 let body = document.body;
 
 // Function to add a new blog post
-function emptyFields() {
-  genreInp.value = "";
-  bTitleInp.value = "";
-  descInp.value = "";
-  blogImg.value = "";
-  console.log("runing empty", blogImg.files[0]);
-}
+// function emptyFields() {
+//   genreInp.value = "";
+//   bTitleInp.value = "";
+//   descInp.value = "";
+//   blogImg.value = "";
+// }
 function addBlog() {
   if (
     genreInp.value === "" ||
@@ -169,7 +161,7 @@ function addBlog() {
     alert("Please fill in all fields.");
   } else {
     addData();
-    emptyFields();
+    // emptyFields();
     closePopup();
     closemenu();
     console.log(blogImg.value);
@@ -229,150 +221,199 @@ let addData = () => {
           getAllBlogs();
           getBlogsForAllBLog();
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     })
-    .catch((err) => {
-    });
+    .catch((err) => {});
 };
 
 // This is for getting blog data for recents Blogs Section
 const allBlogsContainer = document.getElementById("articls");
 const recentnotFoundCon = document.getElementById("recent-not-found");
+
 const getAllBlogs = async () => {
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
-
-    // Set initial value of blogsFound to false
     let blogsFound = false;
 
-    // Loop through users
+    // Get the list of removed blog IDs from local storage
+    const removedBlogIds =
+      JSON.parse(localStorage.getItem("removedBlogIds")) || [];
+
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
       const userBlogsSnapshot = await get(userBlogsRef);
 
-      // Check if user has blogs
       if (userBlogsSnapshot.exists()) {
-        // Loop through blogs
         for (const [blogId, blogData] of Object.entries(
           userBlogsSnapshot.val()
         )) {
-          // Process blog data and add to UI
-          const userRef = ref(db, `UsersUid/${userId}`);
-          const userSnapshot = await get(userRef);
-          const userData = userSnapshot.val();
+          const blogTimestamp = blogData.timestamp || 0;
+          const currentTimestamp = Date.now();
+          const timeDifference = currentTimestamp - blogTimestamp;
 
-          const publishedDate = blogData.publishDate || "Not Available";
+          const isWithin10Seconds = timeDifference <= 86400000; // 10 seconds in milliseconds
 
-          const blogElement = document.createElement("article");
-          blogElement.id = blogId;
-          blogElement.classList.add("article__card", "swiper-slide");
-          blogElement.innerHTML = `
-            <figure class="article__image">
-              <img src="${blogData.imgUrl}" alt="" />
-            </figure>
-            <div class="article__content">
-              <a href="#" class="card__category">${blogData.genreofBlog}</a>
-              <span class="postingInfo">
-                <span class="author">Author: ${userData.nameofuser} </span>
-                <span class="pb-date">Published on: ${publishedDate}</span>
-              </span>
-              <h3 class="card__title">${blogData.titleofBlog}</h3>
-              <p class="card__excerpt">${blogData.descofBlog}</p>
-            </div>
-            <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
-          `;
+          if (isWithin10Seconds && !removedBlogIds.includes(blogId)) {
+            // Display the blog
+            const userRef = ref(db, `UsersUid/${userId}`);
+            const userSnapshot = await get(userRef);
+            const userData = userSnapshot.val();
 
-          allBlogsContainer.appendChild(blogElement);
+            const publishedDate = blogData.publishDate || "Not Available";
 
-          // Set blogsFound to true since at least one blog is found
-          blogsFound = true;
+            const blogElement = createBlogElement(
+              blogId,
+              userData,
+              blogData,
+              publishedDate
+            );
+
+            allBlogsContainer.appendChild(blogElement);
+            blogsFound = true;
+
+            // Set a timeout to remove the blog after 10 seconds
+            setTimeout(() => {
+              removeBlog(blogId);
+            }, 86400000);
+          }
         }
       }
     }
 
-    // Display the notFoundCon only if no blogs are found
     recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
+    fullLoader.style.display = "none";
+
+    console.log("blog Found :", blogsFound);
   } catch (error) {
     console.error("Error fetching data:", error);
-    // Handle errors if needed
   }
 };
-window.addEventListener("load", () => {
-  getAllBlogs();
-});
+
+const createBlogElement = (blogId, userData, blogData, publishedDate) => {
+  const blogElement = document.createElement("article");
+  blogElement.id = blogId;
+  blogElement.classList.add("article__card", "swiper-slide");
+  blogElement.innerHTML = `
+    <div class="card card1">
+      <div class="Imgcontainer">
+        <img id="img" src="${blogData.imgUrl}" alt="Image 1">
+      </div>
+      <div class="details">
+        <span class="postingInfo">
+          <span class="author">Author: ${userData.nameofuser} </span>
+          <span class="pb-date">Published on: ${publishedDate}</span>
+        </span>
+        <span id="genre">${blogData.genreofBlog}</span>
+        <h3 id="blogtitle">${blogData.titleofBlog}</h3>
+        <p id="desc">${blogData.descofBlog}</p>
+        <div id="blogbtns">
+          <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
+        </div>
+      </div>
+    </div>
+  `;
+  return blogElement;
+};
+
+const removeBlog = (blogId) => {
+  const blogToRemove = document.getElementById(blogId);
+  if (blogToRemove) {
+    blogToRemove.remove();
+
+    // Store the removed blog ID in local storage
+    const removedBlogIds =
+      JSON.parse(localStorage.getItem("removedBlogIds")) || [];
+    removedBlogIds.push(blogId);
+    localStorage.setItem("removedBlogIds", JSON.stringify(removedBlogIds));
+
+    recentnotFoundCon.style.display = "flex";
+  }
+};
+
+window.addEventListener("load", getAllBlogs);
 
 // This is for getting blog data for ALL Blogs Section
 const allBlogsArticles = document.getElementById("all-articls");
 const allNotFoundCon = document.getElementById("all-not-found");
+let lastFetchedTimestamp = 0; // Initialize with 0, assuming no blogs are fetched initially
+
 const getBlogsForAllBLog = async () => {
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
-
-    // Set initial value of blogsFound to false
     let blogsFound = false;
 
-    // Loop through users
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
       const userBlogsSnapshot = await get(userBlogsRef);
 
-      // Check if user has blogs
       if (userBlogsSnapshot.exists()) {
-        // Loop through blogs
         for (const [blogId, blogData] of Object.entries(
           userBlogsSnapshot.val()
         )) {
-          // Process blog data and add to UI
-          const userRef = ref(db, `UsersUid/${userId}`);
-          const userSnapshot = await get(userRef);
-          const userData = userSnapshot.val();
+          // Check if the blog was created or updated after the last fetch
+          const blogTimestamp = blogData.timestamp || 0; // Assuming a 'timestamp' field in your blog data
+          if (blogTimestamp > lastFetchedTimestamp) {
+            const userRef = ref(db, `UsersUid/${userId}`);
+            const userSnapshot = await get(userRef);
+            const userData = userSnapshot.val();
 
-          const publishedDate = blogData.publishDate || "Not Available";
+            const publishedDate = blogData.publishDate || "Not Available";
 
-          const blogElement = document.createElement("article");
-          blogElement.id = blogId;
-          blogElement.classList.add("article__card", "swiper-slide");
-          blogElement.innerHTML = `
-            <figure class="article__image">
-              <img src="${blogData.imgUrl}" alt="" />
-            </figure>
-            <div class="article__content">
-              <a href="#" class="card__category">${blogData.genreofBlog}</a>
-              <span class="postingInfo">
-                <span class="author">Author: ${userData.nameofuser} </span>
-                <span class="pb-date">Published on: ${publishedDate}</span>
-              </span>
-              <h3 class="card__title">${blogData.titleofBlog}</h3>
-              <p class="card__excerpt">${blogData.descofBlog}</p>
-            </div>
-            <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
-          `;
+            const blogElement = document.createElement("article");
+            blogElement.id = blogId;
+            blogElement.classList.add("article__card", "swiper-slide");
+            blogElement.innerHTML = `
+              <div class="card card1">
+                <div class="Imgcontainer">
+                  <img id="img" src="${blogData.imgUrl}" alt="Image 1">
+                </div>
+                <div class="details">
+                  <span class="postingInfo">
+                    <span class="author">Author: ${userData.nameofuser} </span>
+                    <span class="pb-date">Published on: ${publishedDate}</span>
+                  </span>
+                  <span id="genre">${blogData.genreofBlog}</span>
+                  <h3 id="blogtitle">${blogData.titleofBlog}</h3>
+                  <p id="desc">${blogData.descofBlog}</p>
+                  <div id="blogbtns">
+                    <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
+                  </div>
+                </div>
+              </div>
+            `;
 
-          allBlogsArticles.appendChild(blogElement);
+            allBlogsArticles.appendChild(blogElement);
+            blogsFound = true;
 
-          // Set blogsFound to true since at least one blog is found
-          blogsFound = true;
+            // Update the last fetched timestamp with the current blog's timestamp
+            if (blogTimestamp > lastFetchedTimestamp) {
+              lastFetchedTimestamp = blogTimestamp;
+            }
+          }
         }
       }
     }
-
-    // Display the notFoundCon only if no blogs are found
+    document.getElementById(
+      "not-found-text"
+    ).innerHTML = `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.`;
     allNotFoundCon.style.display = blogsFound ? "none" : "flex";
+    fullLoader.style.display = "none";
+
+    console.log("blog Found :", blogsFound);
   } catch (error) {
     console.error("Error fetching data:", error);
-    // Handle errors if needed
   }
 };
-window.addEventListener("load", () => {
-  getBlogsForAllBLog();
-});
+
+window.addEventListener("load", getBlogsForAllBLog);
+
+
+
 
 // Function to handle when a new image is selected
 blogImg.onchange = function () {
   handleImageUpload();
 };
-
 // Function to show a preview of the selected image
 function handleImageUpload() {
   const inputElement = document.getElementById("blog-img");

@@ -41,7 +41,7 @@ html {
   justify-content: center;
   align-items: center;
   background-color: #000;
-  /* display: none; */
+  display: none;
 }
 .newtons-cradle {
   --uib-size: 10px;
@@ -605,23 +605,6 @@ textarea::-webkit-scrollbar {
   position: relative;
   backdrop-filter: blur(150px);
 }
-#spinner {
-  height: 80vh;
-  width: 100%;
-  background-color: #333;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999999;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  /* display: none; */
-}
-
 #all-blogs {
   width: 100%;
   height: max-content;
@@ -635,84 +618,88 @@ textarea::-webkit-scrollbar {
   /* background-color: #333; */
   backdrop-filter: blur(100px);
 }
+/* ####    Added Grid starts here!    ##### */
 
-.all-blogs {
-  background-size: cover;
-  background-position: center;
-  color: white;
-  display: flex;
-  align-items: center;
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  max-width: 90vw;
+  padding: 20px;
+  grid-gap: 4rem;
   justify-content: center;
-  overflow: hidden;
-  transform-origin: top center;
-  /* margin-top: 25rem; */
+  margin-top: 5rem;
 }
-.article-container {
-  max-width: 1024px;
-  width: 100%;
-  /* height: 100vh; */
-  margin-inline: auto;
-  padding: 2.5rem 1.5rem;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+.card {
+  height: 85vh;
+  width: 500px;
+  background-color: #1c1b29;
+  border-radius: 20px;
 }
-.article__card {
-  width: 17.5rem;
-  height: 100%;
-  background: #fff;
-  border-radius: 1.25rem;
-  overflow: hidden;
-}
-.article__image {
-  height: 17rem;
-}
-.article__image img {
-  width: 100%;
-  height: 100%;
-  border-radius: 1.25rem 1.25rem 0 0;
-  object-fit: cover;
-}
-.article__content {
-  padding: 1.5rem;
+
+.Imgcontainer {
   position: relative;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+.Imgcontainer img {
+  height: 35vh;
+  object-fit: cover;
+  width: 100%;
+  display: inline-block;
+  border-radius: 20px 20px 0 0;
+}
+
+.Imgcontainer:after {
+  content: "";
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 20px 20px 0 0;
+  opacity: 0.7;
+}
+
+.details {
+  height: 45vh;
+  padding: 20px 10px;
+  position: relative;
+  /* background: #333; */
 }
 .postingInfo {
-  background-color: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(80px);
+  position: absolute;
+  right: 5px;
   display: flex;
   flex-direction: column;
-  width: max-content;
   font-size: 0.8rem;
-  color: #000;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 8px;
-  border-radius: 5px;
+  color: #acacac;
+  top: 0;
+  padding: 5px 15px;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
 }
-.postingInfo .author {
+#genre {
+  color: #acacac;
+  margin-left: 5px;
+  position: absolute;
+  top: 10px;
   text-transform: capitalize;
 }
-.card__category {
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
+
+.details > h3 {
+  text-transform: capitalize;
+  color: #ffffff;
   font-weight: 600;
-  color: #333;
-  display: block;
-  padding-left: 5px;
+  font-size: 1.6rem;
+  margin: 2.8rem 2px 15px 0.7rem;
 }
-.card__title {
-  margin-block: 0.8rem;
-  color: #22447b;
-  height: 3.5rem;
-  width: 65%;
-  padding-left: 5px;
-}
-.card__excerpt {
-  color: #000;
+
+.details > p {
+  text-transform: capitalize;
+  color: #a0a0a0;
   margin: 0;
   overflow: hidden;
   padding-bottom: 10px;
@@ -720,78 +707,48 @@ textarea::-webkit-scrollbar {
   height: 4.7rem;
   max-width: 100%;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Number of lines to show */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   padding-left: 5px;
 }
+#blogbtns {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+  height: 30%;
+}
+
+.first-btn {
+  align-items: center;
+}
 #viewmore {
   padding: 0.8rem 1.2rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-  float: right;
-  border-radius: 8px;
+  background-color: #837f7f;
+  color: #000;
+  border-radius: 50px;
   transition: all 0.3s;
 }
-#viewmore:hover {
-  background-color: rgba(0, 0, 0, 0.692);
+#viewmore:hover{
+  background-color: #837f7f98;
 }
 
-.swiper-pagination {
-  height: 2rem;
-}
-.swiper-container {
-  margin: auto;
-  width: 23rem;
-}
-.swiper-slide {
-  width: 100%;
-}
-
-#prev-btn,
-#next-btn {
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 5rem;
-  height: 5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  padding: 1.2rem;
-  color: #fff;
-  transition: all 0.1s ease-in;
-}
-#prev-btn i,
-#next-btn i {
-  font-size: 1.5rem;
-}
-#prev-btn:active,
-#next-btn:active {
-  transform: scale(0.95);
-}
-#prev-btn:hover,
-#next-btn:hover {
-  background: rgba(0, 0, 0, 0.7);
-}
-
-#next-btn::after {
-  display: none;
-}
-#prev-btn::after {
-  display: none;
-}
-
+/* // End Grid  // */
 #all-blogs-head {
   position: absolute;
-  top: 8%;
+  top: 4%;
+  left: 0%;
   color: #fff;
   font-size: 2.5rem;
   width: 100vw;
   display: flex;
-  justify-content: flex-start;
-  padding-left: 15%;
+  justify-content: center;
   align-items: center;
+}
+#all-blogs-head h1{
+  padding: 10px;
+  border-bottom: 2px solid #acacac;
 }
 .not-found-container {
   width: 100vw;
@@ -802,16 +759,21 @@ textarea::-webkit-scrollbar {
   align-items: center;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
 }
+
 #not-found-text {
   color: #fff;
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 100;
+  transform: translateX(-10%);
 }
-#not-found {
-  transform: translateX(5%);
+
+#recent-not-found-img {
+  transform: translate(-5%, -20%);
 }
+
 /*Slider Khatam */
 
 @keyframes scrolldown {
