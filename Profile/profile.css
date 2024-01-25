@@ -2,8 +2,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+}html,
 body {
+  scroll-behavior: smooth;
   overflow-x: hidden;
   height: 100%;
   width: 100%;
@@ -40,7 +41,7 @@ a {
   justify-content: center;
   align-items: center;
   background-color: #000;
-  display: none;
+  /* display: none; */
 }
 .newtons-cradle {
   --uib-size: 10px;

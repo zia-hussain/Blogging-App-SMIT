@@ -96,11 +96,7 @@ const updateUI = (userName, profileImageUrl) => {
     img.setAttribute("src", profileImageUrl);
   }
 
-  if (userName && profileImageUrl) {
-    setTimeout(() => {
-      // fullLoader.style.display = "none";
-    }, 2000); // Hide loader after a delay of 2000 milliseconds (2 seconds)
-  }
+
 };
 
 getUserData();
@@ -339,6 +335,8 @@ const getAllBlogs = async () => {
 
           // Set blogsFound to true since at least one blog is found
           blogsFound = true;
+  fullLoader.style.display = 'none'
+
         }
       }
     }
