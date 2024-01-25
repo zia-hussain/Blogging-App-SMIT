@@ -25,6 +25,11 @@ sign_in_btn.addEventListener("click", () => {
   container.classList.remove("sign-up-mode");
 });
 skipBtn.addEventListener("click", () => {
+  signupEmail.value = "";
+  signupPass.value = "";
+  signupusername.value = "";
+  email.value = "";
+  password.value = "";
   container.classList.remove("sign-up-mode");
 });
 loginSkip.addEventListener("click", () => {
@@ -68,6 +73,11 @@ const auth = getAuth(app);
 const dbref = ref(db);
 const provider = new FacebookAuthProvider();
 
+// Other Variables
+let signupEmail = document.getElementById("signup-email");
+let signupPass = document.getElementById("signup-password");
+let signupusername = document.getElementById("username");
+
 let addData = () => {
   // Assume user is authenticated and you have user.uid defined
   const user = auth.currentUser;
@@ -95,14 +105,21 @@ let RetData = () => {
     }
   });
 };
-
+// This is For SignUp
 let registerUser = (e) => {
   e.preventDefault();
 
-  let signupEmail = document.getElementById("signup-email");
-  let signupPass = document.getElementById("signup-password");
+  // Trim the values to remove leading and trailing spaces
+  let userEmail = signupEmail.value.trim();
+  let userPassword = signupPass.value.trim();
 
-  createUserWithEmailAndPassword(auth, signupEmail.value, signupPass.value)
+  // Check if email and password are not empty after trimming
+  if (!userEmail || !userPassword) {
+    signUpInvalidation();
+    return;
+  }
+
+  createUserWithEmailAndPassword(auth, userEmail, userPassword)
     .then((credential) => {
       console.log(credential);
       addData();
@@ -110,41 +127,65 @@ let registerUser = (e) => {
       container.classList.remove("sign-up-mode");
       signupEmail.value = "";
       signupPass.value = "";
-      username.value = "";
+      signupusername.value = "";
     })
     .catch((error) => {
       alert(error.message);
     });
 };
 signUpForm.addEventListener("submit", function (event) {
-  registerUser(event); // Call your registerUser function
+  registerUser(event);
 });
 
-let SignInUser = (e) => {
+function signUpInvalidation() {
+  if (!signupEmail.value.trim()) {
+    alert("Please enter your email address.");
+  } else if (!signupPass.value.trim()) {
+    alert("Please enter your password. ");
+  } else if (!signupusername.value.trim()) {
+    alert("Please enter a username.");
+  }
+}
+
+// This is For SignIn
+const SignInUser = (e) => {
   e.preventDefault();
 
-  signInWithEmailAndPassword(auth, email.value, password.value)
-  .then((credential) => {
-    console.log("Sign-in successful", credential);
-    localStorage.setItem("Uid", credential.user.uid);
-    window.open("./Dashboard/dashboard.html", "_blank");
-    email.value = "";
-    password.value = "";
-  })
-  .catch((error) => {
-    console.error("Sign-in error:", error);
-    alert("Please Insert Correct Credential");
-    if (!email) {
-      forgot.style.display = "block";
-    }
-  });
+  const userEmail = email.value.trim();
+  const userPassword = password.value.trim();
+
+  if (!userEmail || !userPassword) {
+    SignInvalidation();
+    return;
+  }
+
+  signInWithEmailAndPassword(auth, userEmail, userPassword)
+    .then((credential) => {
+      console.log("Sign-in successful", credential);
+      localStorage.setItem("Uid", credential.user.uid);
+      window.open("./Dashboard/dashboard.html", "_blank");
+      email.value = "";
+      password.value = "";
+    })
+    .catch((error) => {
+      console.error("Sign-in error:", error);
+      alert("Please insert correct credentials");
+      if (!userEmail) {
+        forgot.style.display = "block";
+      }
+    });
 };
 signInForm.addEventListener("click", SignInUser);
 
-
+function SignInvalidation() {
+  if (!email.value.trim()) {
+    alert("Please enter your email address.");
+  } else if (!password.value.trim()) {
+    alert("Please enter your Password.");
+  }
+}
 
 // ++++++++++++v @@@@@@@@@@@@@###########        FOR FACEBOOK AUTHENTICATION      ###########@@@@@@@@@@@@+++++++++++
-
 
 // let fbbc = () => {
 //   signInWithPopup(auth, provider)
