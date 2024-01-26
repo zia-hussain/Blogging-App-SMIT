@@ -279,7 +279,9 @@ const getAllBlogs = async () => {
         }
       }
     }
-
+    document.getElementById(
+      "not-found-text"
+    ).innerHTML = `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.`;
     recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
     fullLoader.style.display = "none";
 
@@ -304,8 +306,13 @@ const createBlogElement = (blogId, userData, blogData, publishedDate) => {
           <span class="pb-date">Published on: ${publishedDate}</span>
         </span>
         <span id="genre">${blogData.genreofBlog}</span>
-        <h3 id="blogtitle">${blogData.titleofBlog}</h3>
-        <p id="desc">${blogData.descofBlog}</p>
+        <div id="main-dets">
+<div id="title-dets">
+        
+                  <h3 id="blogtitle">${blogData.titleofBlog}</h3>
+                  </div>
+                  <p id="desc">${blogData.descofBlog}</p>
+                  </div>
         <div id="blogbtns">
           <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
         </div>
@@ -373,8 +380,10 @@ const getBlogsForAllBLog = async () => {
                     <span class="pb-date">Published on: ${publishedDate}</span>
                   </span>
                   <span id="genre">${blogData.genreofBlog}</span>
+                  <div id="main-dets">
                   <h3 id="blogtitle">${blogData.titleofBlog}</h3>
                   <p id="desc">${blogData.descofBlog}</p>
+                  </div>
                   <div id="blogbtns">
                     <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
                   </div>
@@ -393,9 +402,7 @@ const getBlogsForAllBLog = async () => {
         }
       }
     }
-    document.getElementById(
-      "not-found-text"
-    ).innerHTML = `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.`;
+
     allNotFoundCon.style.display = blogsFound ? "none" : "flex";
     fullLoader.style.display = "none";
 
@@ -406,9 +413,6 @@ const getBlogsForAllBLog = async () => {
 };
 
 window.addEventListener("load", getBlogsForAllBLog);
-
-
-
 
 // Function to handle when a new image is selected
 blogImg.onchange = function () {

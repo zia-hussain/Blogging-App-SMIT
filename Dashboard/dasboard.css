@@ -41,7 +41,7 @@ html {
   justify-content: center;
   align-items: center;
   background-color: #000;
-  display: none;
+  /* display: none; */
 }
 .newtons-cradle {
   --uib-size: 10px;
@@ -121,6 +121,7 @@ html {
   z-index: 99;
   transition: all 3s ease-in;
   background-color: rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   display: none;
 }
@@ -230,8 +231,9 @@ button {
   padding: 0.7rem 1rem;
   border: none;
   outline: none;
-  border-radius: 7px;
-  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  background-color: #1C1B29;
+  -webkit-backdrop-filter: blur(100px);
   backdrop-filter: blur(100px);
   color: #fff;
   font-size: 0.9rem;
@@ -245,7 +247,7 @@ button {
   display: none;
 }
 button:hover {
-  background-color: #f0f0f0;
+  background-color: #fff;
   color: #000;
 }
 hr {
@@ -253,6 +255,7 @@ hr {
   background-color: #fff8; /* Change to black (#000) */
   height: 2px;
   border: none;
+  -webkit-backdrop-filter: blur(100px);
   backdrop-filter: blur(100px);
 }
 
@@ -275,6 +278,7 @@ hr {
   width: 40vw;
   height: 76vh;
   background-color: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-radius: 10px;
   position: fixed;
@@ -524,6 +528,7 @@ textarea::-webkit-scrollbar {
   gap: 2rem;
   flex-direction: column;
   text-align: center;
+  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   position: relative;
   /* background: #000; */
@@ -554,6 +559,7 @@ textarea::-webkit-scrollbar {
 #h-btn {
   margin-top: 10px;
   background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: #fff;
   display: none;
@@ -603,7 +609,8 @@ textarea::-webkit-scrollbar {
   align-items: center;
   padding-top: 10rem;
   position: relative;
-  backdrop-filter: blur(150px);
+  -webkit-backdrop-filter: blur(100px);
+  backdrop-filter: blur(100px);
 }
 #all-blogs {
   width: 100%;
@@ -616,10 +623,10 @@ textarea::-webkit-scrollbar {
   padding-top: 10rem;
   position: relative;
   /* background-color: #333; */
+  -webkit-backdrop-filter: blur(100px);
   backdrop-filter: blur(100px);
 }
 /* ####    Added Grid starts here!    ##### */
-
 
 .cards {
   display: grid;
@@ -678,6 +685,7 @@ textarea::-webkit-scrollbar {
   top: 0;
   padding: 5px 15px;
   background-color: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 30px;
 }
@@ -686,18 +694,26 @@ textarea::-webkit-scrollbar {
   margin-left: 5px;
   position: absolute;
   top: 10px;
+  width: 40%;
   text-transform: capitalize;
 }
+.details #main-dets {
+  width: 100%;
+  margin-top: 3.5rem;
+  height: 25vh;
+  color: #fff;
+  position: relative;
+}
 
-.details > h3 {
+.details #main-dets h3 {
   text-transform: capitalize;
   color: #ffffff;
   font-weight: 600;
   font-size: 1.6rem;
-  margin: 2.8rem 2px 15px 0.7rem;
+  margin: 0 2px 15px 0.7rem;
 }
 
-.details > p {
+.details #main-dets p {
   text-transform: capitalize;
   color: #a0a0a0;
   margin: 0;
@@ -716,7 +732,6 @@ textarea::-webkit-scrollbar {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 1rem;
   height: 30%;
 }
 
@@ -730,7 +745,7 @@ textarea::-webkit-scrollbar {
   border-radius: 50px;
   transition: all 0.3s;
 }
-#viewmore:hover{
+#viewmore:hover {
   background-color: #837f7f98;
 }
 
@@ -746,7 +761,7 @@ textarea::-webkit-scrollbar {
   justify-content: center;
   align-items: center;
 }
-#all-blogs-head h1{
+#all-blogs-head h1 {
   padding: 10px;
   border-bottom: 2px solid #acacac;
 }
@@ -890,7 +905,9 @@ textarea::-webkit-scrollbar {
   .popup {
     width: 70vw;
     height: 70vh;
-    backdrop-filter: blur(200px);
+    background: transparent;
+    -webkit-backdrop-filter: blur(100px);
+    backdrop-filter: blur(100px);
     border-radius: 10px;
   }
   #btns {
@@ -905,15 +922,51 @@ textarea::-webkit-scrollbar {
     overflow: hidden;
   }
 }
+@media screen and (max-width: 768px) {
+  .article__card {
+    min-width: 100%;
+  }
+  .cards {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .card {
+    width: 300px;
+  }
+
+  .details #main-dets h3 {
+    font-size: 1.4rem;
+  }
+
+  .details #main-dets p {
+    height: 4rem;
+  }
+
+  .details #main-dets #title-dets {
+    min-height: max-content;
+    max-height: 70%;
+    margin-top: 1rem;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 @media (max-width: 574px) {
   .nav-right ul {
     width: 40vw;
+  }
+  .nav-left h1 {
+    font-size: 1.5rem;
   }
   #greeting {
     width: 100%;
     font-size: 2rem;
     line-height: 45px;
-    padding-inline: 5px;
+    padding-inline: 10px;
   }
   #title {
     font-size: 2rem;
@@ -926,10 +979,9 @@ textarea::-webkit-scrollbar {
     width: 95%;
     line-height: 25px;
     margin-top: 2rem;
+    font-size: 1.1rem;
   }
-  .nav-left h1 {
-    font-size: 1.5rem;
-  }
+ 
   #all-blogs-head {
     top: 10%;
     justify-content: center;
@@ -944,6 +996,7 @@ textarea::-webkit-scrollbar {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: blur(200px);
     backdrop-filter: blur(200px);
   }
   .popup #close {
@@ -997,7 +1050,7 @@ textarea::-webkit-scrollbar {
     padding-left: 0;
   }
   #all-blogs-head h1 {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
 }
 @media (max-width: 300px) {
