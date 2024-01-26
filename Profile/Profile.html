@@ -49,6 +49,12 @@
       <!---Start Here !---->
       <nav id="nav" class="nav">
         <div class="nav-left">
+          <i id="menu" onclick="showmenu()" class="fa-solid fa-bars"></i>
+          <i
+            id="closemenu"
+            onclick="closemenu()"
+            class="fa-solid fa-times"
+          ></i>
           <h1>Personal Blogging App</h1>
         </div>
         <div class="nav-right">
@@ -91,6 +97,13 @@
         <div id="all-blogs">
           <h1>My Blogs</h1>
           <div class="cards" id="articls">
+            <!-- <div id="recent-not-found" class="not-found-container">
+              <img id="recent-not-found-img" src="not-found.png" alt="" />
+              <span id="not-found-text">
+                No blogs are currently available. <br />
+                Check back later for updates or contribute your own!
+              </span>
+            </div> -->
             <!-- <div class="card card1">
               <div class="container">
                 <img src="image.jpg" alt="Image 1">

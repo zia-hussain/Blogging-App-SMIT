@@ -86,6 +86,7 @@ const updateUI = (userName, profileImageUrl) => {
   nav.classList.add("enlarged");
   ifLoginBtn.forEach((element) => {
     element.style.display = userName !== "Guest" ? "block" : "none";
+    fullLoader.style.display = "none";
   });
 
   // Update the UI elements with user-specific information
@@ -95,8 +96,6 @@ const updateUI = (userName, profileImageUrl) => {
   if (profileImageUrl) {
     img.setAttribute("src", profileImageUrl);
   }
-
-
 };
 
 getUserData();
@@ -322,7 +321,7 @@ const getAllBlogs = async () => {
                   </div>
                   <div class="second-btn">
                     <i class="fa-regular fa-trash-can"></i>
-                    <i class="fa-regular fa-pen-to-square"></i>
+                    <i  class="fa-regular fa-pen-to-square edit"></i>
                   </div>
                 </div>
               </div>
@@ -333,14 +332,26 @@ const getAllBlogs = async () => {
           const trashIcon = blogElement.querySelector(".fa-trash-can");
           trashIcon.addEventListener("click", () => delTask(blogId));
 
+          let editBtn = document.querySelector('.edit');
+          if (editBtn) {
+              editBtn.addEventListener("click", () => {
+                  alert('han hogya bhaii');
+                  editTask(blogId);
+              });
+          }
+        
+        
+
           // Set blogsFound to true since at least one blog is found
           blogsFound = true;
-  fullLoader.style.display = 'none'
-
         }
       }
     }
-
+    if (blogsFound) {
+      fullLoader.style.display = "none"; // Call function to hide full loader
+    } else {
+      fullLoader.style.display = "none";
+    }
     // Display the notFoundCon only if no blogs are found
     // recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
   } catch (error) {
@@ -353,40 +364,120 @@ window.addEventListener("load", () => {
 });
 
 //  for deleting blogs
-
-// Function to delete a blog post
 function delTask(blogId) {
-  // try {
   const user = auth.currentUser;
-  console.log(auth.currentUser);
-
   if (user) {
     const userId = user.uid;
-    console.log(blogId);
-    // const blogDataRef = ref(db, `BlogData/${userId}/${blogId}`);
-    remove(ref(db, `BlogData/${userId}/${blogId}`))
-      .then((res) => {
-        console.log("data removed successfully", res);
+    const blogDataRef = ref(db, `BlogData/${userId}`);
+
+    // Get a snapshot of the user's blog data
+    get(blogDataRef)
+      .then((snapshot) => {
+        const blogData = snapshot.val();
+
+        // Check if the user has only one blog post
+        const blogCount = Object.keys(blogData).length;
+
+        if (blogCount === 1) {
+          // If there's only one blog post, remove the entire BlogData node
+          remove(blogDataRef)
+            .then(() => {
+              console.log("Last blog post deleted successfully");
+              // Handle UI updates
+              document.getElementById(blogId).remove(); // Remove the blog post from the UI
+            })
+            .catch((error) => {
+              console.error("Error deleting last blog post:", error);
+              // Handle error gracefully
+            });
+        } else {
+          // If there are multiple blog posts, delete the specific blog post by its ID
+          remove(ref(db, `BlogData/${userId}/${blogId}`))
+            .then(() => {
+              console.log("Blog post deleted successfully");
+              // Handle UI updates
+              document.getElementById(blogId).remove(); // Remove the blog post from the UI
+            })
+            .catch((error) => {
+              console.error("Error deleting blog post:", error);
+              // Handle error gracefully
+            });
+        }
       })
       .catch((error) => {
-        alert("error" + error);
+        console.error("Error fetching blog data:", error);
+        // Handle error gracefully
       });
+  } else {
+    console.log("User is not signed in.");
   }
-  //     await remove(blogDataRef)
-  //       .then((result) => {
-  //         console.log(result);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-
-  //     // Reload the page or update the UI as needed
-  //     // location.reload();
-  //   } else {
-  //     alert("User is not signed in.");
-  //   }
-  // } catch (error) {
-  //   console.error("Error during blog deletion:", error);
-  //   alert("Error deleting blog. Please check the console for details.");
-  // }
 }
+
+// for edit blogs data
+
+function editTask(blogId) {
+  const blogDataRef = ref(db, `BlogData/${blogId}`);
+
+  // Get the current content of the blog post
+  get(blogDataRef)
+    .then((snapshot) => {
+      const blogData = snapshot.val();
+
+      // Prompt the user to enter the new data for the blog post
+      const newTitle = prompt(
+        "Enter the new title for your blog post:",
+        blogData.titleofBlog
+      );
+      const newContent = prompt(
+        "Enter the new content for your blog post:",
+        blogData.descofBlog
+      );
+      const newGenre = prompt(
+        "Enter the new genre for your blog post:",
+        blogData.genreofBlog
+      );
+
+      if (newTitle !== null && newContent !== null && newGenre !== null) {
+        // If user didn't cancel
+        // Update the content of the blog post in the database
+        update(blogDataRef, {
+          titleofBlog: newTitle,
+          descofBlog: newContent,
+          genreofBlog: newGenre,
+          // Add more fields here if needed
+        })
+          .then(() => {
+            console.log("Blog post updated successfully");
+
+            // Update the UI with the new content
+            const titleElement = document.getElementById(`title-${blogId}`);
+            const contentElement = document.getElementById(`content-${blogId}`);
+            const genreElement = document.getElementById(`genre-${blogId}`);
+
+            if (titleElement && contentElement && genreElement) {
+              titleElement.textContent = newTitle;
+              contentElement.textContent = newContent;
+              genreElement.textContent = newGenre;
+            } else {
+              console.error("One or more elements not found.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error updating blog post:", error);
+            // Handle error gracefully
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching blog data:", error);
+      // Handle error gracefully
+    });
+}
+
+// Event listener for the edit button
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("edit")) {
+    const blogId = event.target.closest(".card").dataset.blogid;
+    editTask(blogId);
+  }
+});
