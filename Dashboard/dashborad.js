@@ -3,6 +3,7 @@ import {
   getDatabase,
   ref,
   push,
+  update,
   set,
   onValue,
   child,
@@ -40,8 +41,6 @@ let btn = document.getElementById("btn");
 let heroBtn = document.getElementById("h-btn");
 let ifLoginBtn = document.querySelectorAll(".if-login");
 let nav = document.querySelector(".nav");
-let titleall;
-let viewmore = document.getElementById("viewmore");
 // let notFoundCon = document.querySelector(".not-found-container");
 
 // #######################    For image preview in the input    ############
@@ -120,18 +119,13 @@ function heroBtnvalue() {
   // Redirect to different pages based on the hero button text
   if (heroBtn.innerText === "MY PROFILE") {
     window.location.replace("../Profile/Profile.html");
-  } else if (heroBtn.innerText === "BE A MEMBER !") {
-    window.location.replace("../index.html");
+  } else if (heroBtn.innerText === "BE A MEMBER!") {
+    window.location.replace("/index.html");
   }
 }
 heroBtn.addEventListener("click", heroBtnvalue);
 
 // Variable declarations for various form input elements
-let genre = document.getElementById("b-genre");
-let bTitle = document.getElementById("b-title");
-let desc = document.getElementById("b-desc");
-let author = document.getElementById("author");
-let publishDate = document.getElementById("pb-date");
 let genreInp = document.getElementById("topic");
 let bTitleInp = document.getElementById("titleinp");
 let descInp = document.getElementById("desc");
@@ -139,10 +133,8 @@ let blogImg = document.getElementById("blog-img");
 
 let uploadBtn = document.getElementById("upload");
 let userUid = localStorage.getItem("Uid");
-const show = document.getElementById("blogshow");
 // const loaderContainer = document.getElementById("spinner");
 const fullLoader = document.getElementById("t-spinner");
-let body = document.body;
 
 // Function to add a new blog post
 // function emptyFields() {
@@ -236,24 +228,22 @@ const getAllBlogs = async () => {
     let blogsFound = false;
 
     // Get the list of removed blog IDs from local storage
-    const removedBlogIds =
-      JSON.parse(localStorage.getItem("removedBlogIds")) || [];
+    const removedBlogIds = JSON.parse(localStorage.getItem("removedBlogIds")) || [];
 
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
       const userBlogsSnapshot = await get(userBlogsRef);
 
       if (userBlogsSnapshot.exists()) {
-        for (const [blogId, blogData] of Object.entries(
-          userBlogsSnapshot.val()
-        )) {
+        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
           const blogTimestamp = blogData.timestamp || 0;
           const currentTimestamp = Date.now();
           const timeDifference = currentTimestamp - blogTimestamp;
 
-          const isWithin10Seconds = timeDifference <= 86400000; // 10 seconds in milliseconds
+          // Check if the blog is within the last minute
+          const isWithin1Minute = timeDifference <= 10000; // 1 minute in milliseconds
 
-          if (isWithin10Seconds && !removedBlogIds.includes(blogId)) {
+          if (isWithin1Minute && !removedBlogIds.includes(blogId)) {
             // Display the blog
             const userRef = ref(db, `UsersUid/${userId}`);
             const userSnapshot = await get(userRef);
@@ -271,25 +261,30 @@ const getAllBlogs = async () => {
             allBlogsContainer.appendChild(blogElement);
             blogsFound = true;
 
-            // Set a timeout to remove the blog after 10 seconds
+            // Set a timeout to remove the blog after 1 minute
             setTimeout(() => {
               removeBlog(blogId);
-            }, 86400000);
+            }, 10000); // 1 minute in milliseconds
           }
         }
       }
     }
-    document.getElementById(
-      "not-found-text"
-    ).innerHTML = `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.`;
+
+    // Update UI based on blog availability
+    document.getElementById("not-found-text").innerHTML = blogsFound ?
+      `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.` :
+      `No new articles available.`;
     recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
     fullLoader.style.display = "none";
 
-    console.log("blog Found :", blogsFound);
+    console.log("Blogs Found:", blogsFound);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
+
+// Rest of your code remains unchanged
+
 
 const createBlogElement = (blogId, userData, blogData, publishedDate) => {
   const blogElement = document.createElement("article");
@@ -402,19 +397,17 @@ const getBlogsForAllBLog = async () => {
         }
       }
     }
-
     allNotFoundCon.style.display = blogsFound ? "none" : "flex";
     fullLoader.style.display = "none";
-
     console.log("blog Found :", blogsFound);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
-
 window.addEventListener("load", getBlogsForAllBLog);
 
 // Function to handle when a new image is selected
+
 blogImg.onchange = function () {
   handleImageUpload();
 };
