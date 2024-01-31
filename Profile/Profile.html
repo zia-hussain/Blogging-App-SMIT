@@ -38,6 +38,57 @@
       </div>
     </div>
 
+    <!-- Popup for edit btn -->
+
+    <div class="e-popup" id="e-popup">
+      <i onclick="closePopup()" id="close" class="fa-solid fa-times"></i>
+      <h1>Edit Blog</h1>
+      <div class="input-field">
+        <i class="fa-solid fa-lightbulb"></i>
+        <input id="topic" type="text" placeholder="Topic" />
+      </div>
+      <div class="input-field">
+        <i class="fa-solid fa-pencil"></i>
+        <input id="titleinp" type="text" placeholder="Title" />
+      </div>
+
+      <!-- // image for blog // -->
+      <div class="input-field img-input">
+        <i class="fa-solid fa-image"></i>
+        <i class="fa-solid fa-image view-icon" id="view-icon"></i>
+        <input id="blog-img" type="file" accept="image/*" />
+
+        <label for="blog-img" class="file-placeholder"
+          >Place Your Image</label
+        >
+        <img id="image-preview" class="file-preview" src="#" />
+      </div>
+
+      <!-- Modal for larger image view -->
+      <div id="image-modal" class="modal">
+        <div class="modal-content">
+          <i class="fa-solid fa-times close-icon" onclick="closeModal()"></i>
+          <img id="full-image" />
+        </div>
+      </div>
+
+      <div class="input-field-t">
+        <i class="fa-solid fa-comment"></i>
+        <textarea
+          name="desc"
+          id="desc"
+          cols="30"
+          rows="10"
+          placeholder="Description"
+        ></textarea>
+      </div>
+      
+      <div id="btns">
+        <a id="cancel" onclick="closePopup()" href="#">Cancel</a>
+        <a id="delete" href="#">Update</a>
+      </div>
+    </div>
+
     <div id="t-spinner" class="newtons-cradle">
       <div class="newtons-cradle__dot"></div>
       <div class="newtons-cradle__dot"></div>
@@ -74,7 +125,7 @@
             <input type="file" id="file" />
             <label for="file" id="uploadBtn">Add Profile</label>
           </div>
-          <button id="upload">Update</button>
+          <button id="upload">Done</button>
         </div>
         <div class="hero-right">
           <div class="title">
@@ -97,13 +148,13 @@
         <div id="all-blogs">
           <h1>My Blogs</h1>
           <div class="cards" id="articls">
-            <!-- <div id="recent-not-found" class="not-found-container">
+            <div id="recent-not-found" class="not-found-container">
               <img id="recent-not-found-img" src="not-found.png" alt="" />
               <span id="not-found-text">
                 No blogs are currently available. <br />
                 Check back later for updates or contribute your own!
               </span>
-            </div> -->
+            </div>
             <!-- <div class="card card1">
               <div class="container">
                 <img src="image.jpg" alt="Image 1">
@@ -131,27 +182,112 @@
         </div>
 
 
-    <script>
-      function logoutBtn() {
-        window.location.href = "/index.html";
-      }
-      // close popup
+        <script>
+          function logoutBtn() {
+            window.location.href = "/index.html";
+          }
+        
+          let background = document.getElementById("full");
+          let popup = document.getElementById("popup");
+          let show = document.getElementById("menu");
+          let close = document.getElementById("close");
+ 
+        
+          function openPopup() {
+            popup.classList.add("open-popup");
+          }
+        
+          function closePopup() {
+            popup.classList.remove("open-popup");
+          }
+        
+          function showmenu() {
+            if (window.innerWidth <= 1100) {
+              show.style.display = "none";
+              document.getElementById("closemenu").style.display = "block";
+              document.getElementById("items").style.left = "0";
+            }
+          }
+        
+          function closemenu() {
+            if (window.innerWidth <= 1100) {
+              document.getElementById("closemenu").style.display = "none";
+              document.getElementById("items").style.left = "-35vh";
+              show.style.display = "block";
+            }
+          }
 
-      let background = document.getElementById("full");
-      let popup = document.getElementById("popup");
+  var input = document.getElementById('blog-img');
+  var label = input.nextElementSibling;
 
-      function openPopup() {
-        popup.classList.add("open-popup");
-        // background.style.display = "block";
-      }
 
-      function closePopup() {
-        popup.classList.remove("open-popup");
+  if(!file){
+    label.textContent = 'place you image'
+  }
+ // Function to handle file input change event
+document.getElementById("blog-img").onchange = function() {
+    handleImageUpload();
+};
 
-        // background.style.display = "none";
-      }
+// Function to handle image upload and preview
+function handleImageUpload() {
+    const inputElement = document.getElementById("blog-img");
+    const file = inputElement.files[0];
+    const imagePreview = document.getElementById("image-preview");
+    const viewIcon = document.getElementById("view-icon");
 
-    </script>
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            // Display the selected image in the image preview element
+            imagePreview.src = e.target.result;
+            // Display the view icon
+            imagePreview.style.display = 'block'
+            viewIcon.style.display = "block";
+        };
+
+        // Read the selected file as a data URL
+        reader.readAsDataURL(file);
+    } else {
+        console.log("No image selected.");
+        // If no image selected, hide the image preview and view icon
+        imagePreview.style.display = 'none';
+        viewIcon.style.display = "none";
+        label.textContent = 'Place Your Image'
+    }
+}
+
+// Function to open the modal and display the full image
+function openModal() {
+    var modal = document.getElementById("image-modal");
+    modal.style.display = "flex";
+
+    var fullImage = document.getElementById("full-image");
+    fullImage.src = document.getElementById("image-preview").src;
+}
+
+// Function to close the modal
+function closeModal() {
+    var modal = document.getElementById("image-modal");
+    modal.style.display = "none";
+}
+
+var viewIcon = document.getElementById("view-icon");
+var fileInput = document.getElementById("blog-img");
+var imagePreview = document.getElementById("image-preview");
+
+fileInput.addEventListener("change", function () {
+    viewIcon.style.display = this.files.length > 0 ? "block" : "none";
+    imagePreview.style.display = this.files.length > 0 ? "block" : "none";
+});
+
+// Attach click event to the view icon
+viewIcon.addEventListener("click", openModal);
+
+
+        </script>
+        
     <script type="module" src="profile.js"></script>
   </body>
 </html>

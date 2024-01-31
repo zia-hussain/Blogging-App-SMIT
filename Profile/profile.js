@@ -272,26 +272,22 @@ async function deleteUserBlogData(userId) {
 deleteBtn.addEventListener("click", signout);
 
 const allBlogsContainer = document.getElementById("articls");
+const allNotFoundCon = document.getElementById("recent-not-found");
 
 const getAllBlogs = async () => {
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
 
-    // Set initial value of blogsFound to false
     let blogsFound = false;
 
-    // Loop through users
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
       const userBlogsSnapshot = await get(userBlogsRef);
 
-      // Check if user has blogs
       if (userBlogsSnapshot.exists()) {
-        // Loop through blogs
         for (const [blogId, blogData] of Object.entries(
           userBlogsSnapshot.val()
         )) {
-          // Process blog data and add to UI
           const userRef = ref(db, `UsersUid/${userId}`);
           const userSnapshot = await get(userRef);
           const userData = userSnapshot.val();
@@ -300,7 +296,6 @@ const getAllBlogs = async () => {
 
           const blogElement = document.createElement("article");
           blogElement.id = blogId;
-          console.log(blogId);
           blogElement.classList.add("article__card", "swiper-slide");
           blogElement.innerHTML = `
             <div class="card card1" data-blogid="${blogId}">
@@ -315,7 +310,7 @@ const getAllBlogs = async () => {
                 <span id="genre">${blogData.genreofBlog}</span>
                 <h3 id="title">${blogData.titleofBlog}</h3>
                 <p id="desc">${blogData.descofBlog}</p>
-                <div id="btns">
+                <div id="blogBtns">
                   <div class="first-btn">
                     <a class="btn" id="viewmore" href="/Dashboard/viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
                   </div>
@@ -331,29 +326,42 @@ const getAllBlogs = async () => {
           allBlogsContainer.appendChild(blogElement);
           const trashIcon = blogElement.querySelector(".fa-trash-can");
           trashIcon.addEventListener("click", () => delTask(blogId));
-
-          let editBtn = document.querySelector('.edit');
-          if (editBtn) {
-              editBtn.addEventListener("click", () => {
-                  alert('han hogya bhaii');
-                  editTask(blogId);
-              });
-          }
+            let editBtn = document.querySelector(".edit");
+            let editPopup = document.getElementById("e-popup");
+            let closeBtn = document.getElementById("close");
+            let cancelBtn = document.getElementById("cancel");
         
+            if (editBtn) {
+                editBtn.addEventListener("click", openPopup);
+            }
+        
+            function openPopup() {
+                editPopup.classList.add("open-popup");
+            }
+        
+            function closeEditPopup() {
+                editPopup.classList.remove("open-popup");
+            }
+        
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeEditPopup);
+            }
+        
+            if (cancelBtn) {
+                cancelBtn.addEventListener("click", closeEditPopup);
+            }
         
 
-          // Set blogsFound to true since at least one blog is found
           blogsFound = true;
         }
       }
     }
-    if (blogsFound) {
-      fullLoader.style.display = "none"; // Call function to hide full loader
-    } else {
-      fullLoader.style.display = "none";
-    }
+
     // Display the notFoundCon only if no blogs are found
-    // recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
+    allNotFoundCon.style.display = blogsFound ? "none" : "flex";
+
+    // Hide full loader regardless of blogs found or not
+    fullLoader.style.display = "none";
   } catch (error) {
     console.error("Error fetching data:", error);
     // Handle errors if needed
@@ -365,119 +373,75 @@ window.addEventListener("load", () => {
 
 //  for deleting blogs
 function delTask(blogId) {
-  const user = auth.currentUser;
-  if (user) {
-    const userId = user.uid;
-    const blogDataRef = ref(db, `BlogData/${userId}`);
+  // Show confirmation dialog
+  const isConfirmed = confirm("Are you sure you want to delete this blog?");
 
-    // Get a snapshot of the user's blog data
-    get(blogDataRef)
-      .then((snapshot) => {
-        const blogData = snapshot.val();
+  // Check if the user clicked "OK"
+  if (isConfirmed) {
+    const user = auth.currentUser;
+    if (user) {
+      const userId = user.uid;
+      const blogDataRef = ref(db, `BlogData/${userId}/${blogId}`);
 
-        // Check if the user has only one blog post
-        const blogCount = Object.keys(blogData).length;
-
-        if (blogCount === 1) {
-          // If there's only one blog post, remove the entire BlogData node
-          remove(blogDataRef)
-            .then(() => {
-              console.log("Last blog post deleted successfully");
-              // Handle UI updates
-              document.getElementById(blogId).remove(); // Remove the blog post from the UI
-            })
-            .catch((error) => {
-              console.error("Error deleting last blog post:", error);
-              // Handle error gracefully
-            });
-        } else {
-          // If there are multiple blog posts, delete the specific blog post by its ID
-          remove(ref(db, `BlogData/${userId}/${blogId}`))
-            .then(() => {
-              console.log("Blog post deleted successfully");
-              // Handle UI updates
-              document.getElementById(blogId).remove(); // Remove the blog post from the UI
-            })
-            .catch((error) => {
-              console.error("Error deleting blog post:", error);
-              // Handle error gracefully
-            });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching blog data:", error);
-        // Handle error gracefully
-      });
+      // Remove the blog post from the database
+      remove(blogDataRef)
+        .then(() => {
+          console.log("Blog post deleted successfully");
+          // Handle UI updates
+          document.getElementById(blogId).remove(); // Remove the blog post from the UI
+        })
+        .catch((error) => {
+          console.error("Error deleting blog post:", error);
+          // Handle error gracefully
+        });
+    } else {
+      console.log("User is not signed in.");
+    }
   } else {
-    console.log("User is not signed in.");
+    // User clicked "Cancel", do nothing
+    console.log("Deletion canceled by user.");
   }
 }
 
 // for edit blogs data
 
-function editTask(blogId) {
-  const blogDataRef = ref(db, `BlogData/${blogId}`);
 
-  // Get the current content of the blog post
-  get(blogDataRef)
-    .then((snapshot) => {
-      const blogData = snapshot.val();
 
-      // Prompt the user to enter the new data for the blog post
-      const newTitle = prompt(
-        "Enter the new title for your blog post:",
-        blogData.titleofBlog
-      );
-      const newContent = prompt(
-        "Enter the new content for your blog post:",
-        blogData.descofBlog
-      );
-      const newGenre = prompt(
-        "Enter the new genre for your blog post:",
-        blogData.genreofBlog
-      );
+// for showing img in input file 
 
-      if (newTitle !== null && newContent !== null && newGenre !== null) {
-        // If user didn't cancel
-        // Update the content of the blog post in the database
-        update(blogDataRef, {
-          titleofBlog: newTitle,
-          descofBlog: newContent,
-          genreofBlog: newGenre,
-          // Add more fields here if needed
-        })
-          .then(() => {
-            console.log("Blog post updated successfully");
+document.getElementById("blog-img").addEventListener("change", function () {
+  var input = this;
+  var label = input.nextElementSibling;
 
-            // Update the UI with the new content
-            const titleElement = document.getElementById(`title-${blogId}`);
-            const contentElement = document.getElementById(`content-${blogId}`);
-            const genreElement = document.getElementById(`genre-${blogId}`);
+  if (input.files.length > 0) {
+    var fileType = input.files[0].type;
 
-            if (titleElement && contentElement && genreElement) {
-              titleElement.textContent = newTitle;
-              contentElement.textContent = newContent;
-              genreElement.textContent = newGenre;
-            } else {
-              console.error("One or more elements not found.");
-            }
-          })
-          .catch((error) => {
-            console.error("Error updating blog post:", error);
-            // Handle error gracefully
-          });
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching blog data:", error);
-      // Handle error gracefully
-    });
-}
+    if (!fileType.startsWith("image/")) {
+      // Clear the selected file if it's not an image
+      input.value = "";
+      label.textContent = "Place Your Image";
+      preview.src = "";
+      viewIcon.style.display = "none";
+      alert("Please select an image file.");
+      return;
+    }
 
-// Event listener for the edit button
-document.addEventListener("click", function (event) {
-  if (event.target.classList.contains("edit")) {
-    const blogId = event.target.closest(".card").dataset.blogid;
-    editTask(blogId);
+    // Display image preview
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      viewIcon.style.display = "block";
+      previewIcon.style.display = "block";
+    };
+    reader.readAsDataURL(input.files[0]);
+
+    var fileName = input.files[0].name;
+    label.textContent = fileName;
+  } else {
+    // Clear the preview and label if no file is selected
+    preview.src = "";
+    label.textContent = "Place Your Image";
+    viewIcon.style.display = "none";
   }
 });
+
