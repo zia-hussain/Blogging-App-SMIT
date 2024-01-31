@@ -257,13 +257,17 @@ html {
 }
 .postingDets .genre {
   position: absolute;
-  left: 20px;
-  bottom: 20px;
-  color: #fff8;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 20px;
   font-size: 1.3rem;
 }
 .postingDets .genre #genre {
-  color: #fff;
+  color: #acacaccb;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 1.5rem;
+
 }
 .author {
   position: absolute;

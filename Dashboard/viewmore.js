@@ -83,7 +83,7 @@ const fetchBlogDetails = async () => {
     <div class="container">
       <div class="postingDets">
         <span id="title">${blogData.titleofBlog}</span>
-        <p class="genre">Genre: <span id="genre">${blogData.genreofBlog}</span></p>
+        <p class="genre"><span id="genre">${blogData.genreofBlog}</span></p>
         <p class="author">By: <span id="author">${userData.nameofuser}</span></p>
         <p class="date">Published on: <span id="date">${blogData.publishDate}</span></p>
 
