@@ -218,40 +218,47 @@ let addData = () => {
     .catch((err) => {});
 };
 
-// This is for getting blog data for recents Blogs Section
+//########### This is for getting blog data for Recent Blogs Section  ############
+
 const allBlogsContainer = document.getElementById("articls");
 const recentnotFoundCon = document.getElementById("recent-not-found");
-
 const getAllBlogs = async () => {
+  // Assuming postTime is the time the post was created in milliseconds
+  
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
     let blogsFound = false;
 
     // Get the list of removed blog IDs from local storage
-    const removedBlogIds = JSON.parse(localStorage.getItem("removedBlogIds")) || [];
+    const removedBlogIds =
+      JSON.parse(localStorage.getItem("removedBlogIds")) || [];
 
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
       const userBlogsSnapshot = await get(userBlogsRef);
 
       if (userBlogsSnapshot.exists()) {
-        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+        for (const [blogId, blogData] of Object.entries(
+          userBlogsSnapshot.val()
+        )) {
           const blogTimestamp = blogData.timestamp || 0;
           const currentTimestamp = Date.now();
           const timeDifference = currentTimestamp - blogTimestamp;
-
-          // Check if the blog is within the last minute
-          const isWithin1Minute = timeDifference <= 10000; // 1 minute in milliseconds
-
-          if (isWithin1Minute && !removedBlogIds.includes(blogId)) {
-            // Display the blog
+          console.log(
+            currentTimestamp,
+            blogTimestamp,
+            timeDifference,
+            "chk1 tme"
+          );
+          // Check if the blog is within the specified time threshold and hasn't been removed
+          if (timeDifference <= 10000 && !removedBlogIds.includes(blogId)) {
             const userRef = ref(db, `UsersUid/${userId}`);
             const userSnapshot = await get(userRef);
             const userData = userSnapshot.val();
 
             const publishedDate = blogData.publishDate || "Not Available";
 
-            const blogElement = createBlogElement(
+            const blogElement = createBlogElement(  
               blogId,
               userData,
               blogData,
@@ -261,19 +268,19 @@ const getAllBlogs = async () => {
             allBlogsContainer.appendChild(blogElement);
             blogsFound = true;
 
-            // Set a timeout to remove the blog after 1 minute
+            // Set a timeout to remove the blog after the specified time
             setTimeout(() => {
               removeBlog(blogId);
-            }, 10000); // 1 minute in milliseconds
+            }, 10000); // 10 seconds in milliseconds
           }
         }
       }
     }
 
-    // Update UI based on blog availability
-    document.getElementById("not-found-text").innerHTML = blogsFound ?
-      `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.` :
-      `No new articles available.`;
+    document.getElementById("not-found-text").innerHTML = blogsFound
+      ? ` No blogs are currently available. <br />
+      Check back later for updates or contribute your own!`
+      : `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.`;
     recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
     fullLoader.style.display = "none";
 
@@ -282,10 +289,6 @@ const getAllBlogs = async () => {
     console.error("Error fetching data:", error);
   }
 };
-
-
-// Rest of your code remains unchanged
-
 const createBlogElement = (blogId, userData, blogData, publishedDate) => {
   const blogElement = document.createElement("article");
   blogElement.id = blogId;
@@ -316,33 +319,32 @@ const createBlogElement = (blogId, userData, blogData, publishedDate) => {
   `;
   return blogElement;
 };
-
 const removeBlog = (blogId) => {
   const blogToRemove = document.getElementById(blogId);
   if (blogToRemove) {
     blogToRemove.remove();
 
-    // Store the removed blog ID in local storage
+    // Update the list of removed blog IDs in local storage
     const removedBlogIds =
       JSON.parse(localStorage.getItem("removedBlogIds")) || [];
     removedBlogIds.push(blogId);
     localStorage.setItem("removedBlogIds", JSON.stringify(removedBlogIds));
 
+    // Update UI if necessary
     recentnotFoundCon.style.display = "flex";
   }
 };
-
 window.addEventListener("load", getAllBlogs);
 
-// This is for getting blog data for ALL Blogs Section
+//########### This is for getting blog data for ALL Blogs Section  ############
 const allBlogsArticles = document.getElementById("all-articls");
 const allNotFoundCon = document.getElementById("all-not-found");
-let lastFetchedTimestamp = 0; // Initialize with 0, assuming no blogs are fetched initially
-
+let lastFetchedTimestamp = 0;
 const getBlogsForAllBLog = async () => {
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
     let blogsFound = false;
+    let latestTimestamp = lastFetchedTimestamp; // Initialize the latest timestamp
 
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
@@ -352,8 +354,9 @@ const getBlogsForAllBLog = async () => {
         for (const [blogId, blogData] of Object.entries(
           userBlogsSnapshot.val()
         )) {
-          // Check if the blog was created or updated after the last fetch
           const blogTimestamp = blogData.timestamp || 0; // Assuming a 'timestamp' field in your blog data
+
+          // Check if the blog was created or updated after the last fetch
           if (blogTimestamp > lastFetchedTimestamp) {
             const userRef = ref(db, `UsersUid/${userId}`);
             const userSnapshot = await get(userRef);
@@ -376,8 +379,8 @@ const getBlogsForAllBLog = async () => {
                   </span>
                   <span id="genre">${blogData.genreofBlog}</span>
                   <div id="main-dets">
-                  <h3 id="blogtitle">${blogData.titleofBlog}</h3>
-                  <p id="desc">${blogData.descofBlog}</p>
+                    <h3 id="blogtitle">${blogData.titleofBlog}</h3>
+                    <p id="desc">${blogData.descofBlog}</p>
                   </div>
                   <div id="blogbtns">
                     <a class="btn" id="viewmore" href="./viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
@@ -389,16 +392,19 @@ const getBlogsForAllBLog = async () => {
             allBlogsArticles.appendChild(blogElement);
             blogsFound = true;
 
-            // Update the last fetched timestamp with the current blog's timestamp
-            if (blogTimestamp > lastFetchedTimestamp) {
-              lastFetchedTimestamp = blogTimestamp;
+            // Update the latest timestamp if the current blog's timestamp is greater
+            if (blogTimestamp > latestTimestamp) {
+              latestTimestamp = blogTimestamp;
             }
           }
         }
       }
     }
+
+    // Update the lastFetchedTimestamp with the latestTimestamp
+    lastFetchedTimestamp = latestTimestamp;
+
     allNotFoundCon.style.display = blogsFound ? "none" : "flex";
-    fullLoader.style.display = "none";
     console.log("blog Found :", blogsFound);
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -407,7 +413,6 @@ const getBlogsForAllBLog = async () => {
 window.addEventListener("load", getBlogsForAllBLog);
 
 // Function to handle when a new image is selected
-
 blogImg.onchange = function () {
   handleImageUpload();
 };
@@ -462,66 +467,4 @@ function uploadImage() {
 document.getElementById("upload").addEventListener("click", function (event) {
   event.preventDefault();
   uploadImage();
-});
-
-// This is for slider
-document.addEventListener("DOMContentLoaded", function () {
-  const swiper = new Swiper(".swiper", {
-    loop: true,
-    slidesPerView: 1,
-    spaceBetween: 10,
-    grabCursor: true,
-    // centeredSlides: true, // Center the slides
-    breakpoints: {
-      830: {
-        slidesPerView: 2,
-      },
-      550: {
-        slidesPerView: 3,
-      },
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      type: "bullets",
-      clickable: true,
-      dynamicBullets: true,
-    },
-  });
-
-  // Second //
-  const swiper2 = new Swiper(".all-blogs", {
-    loop: true,
-    slidesPerView: 1,
-    spaceBetween: 10,
-    grabCursor: true,
-
-    breakpoints: {
-      830: {
-        slidesPerView: 2,
-        spaceBetween: 30,
-      },
-      550: {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        coverflowEffect: {
-          rotate: 10,
-          slideShadows: true,
-        },
-      },
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      type: "bullets",
-      clickable: true,
-      dynamicBullets: true,
-    },
-  });
 });

@@ -229,10 +229,9 @@ ul li {
 button {
   width: max-content;
   padding: 0.7rem 1rem;
-  border: none;
   outline: none;
   border-radius: 30px;
-  background-color: #1c1b29;
+  background: linear-gradient(to bottom right, #000, #acacac62);
   -webkit-backdrop-filter: blur(100px);
   backdrop-filter: blur(100px);
   color: #fff;
@@ -245,10 +244,12 @@ button {
   display: block;
   transition: all 0.1s ease-in;
   display: none;
+  border: 2px double #acacac;
+
 }
 button:hover {
-  background-color: #fff;
-  color: #000;
+  background: rgba(0, 0, 0, 0.1);
+  color: #fff;
 }
 hr {
   color: #333;
@@ -610,8 +611,9 @@ textarea::-webkit-scrollbar {
   align-items: center;
   padding-top: 10rem;
   position: relative;
-  -webkit-backdrop-filter: blur(100px);
-  backdrop-filter: blur(100px);
+  background: linear-gradient(to top left, #000, #acacac62);
+  -webkit-backdrop-filter: blur(80px);
+  backdrop-filter: blur(80px);
 }
 #all-blogs {
   width: 100%;
@@ -623,9 +625,9 @@ textarea::-webkit-scrollbar {
   align-items: center;
   padding-top: 10rem;
   position: relative;
-  /* background-color: #333; */
-  -webkit-backdrop-filter: blur(100px);
-  backdrop-filter: blur(100px);
+  background: linear-gradient(to bottom right, #000, #acacac62);
+  -webkit-backdrop-filter: blur(80px);
+  backdrop-filter: blur(80px);
 }
 /* ####    Added Grid starts here!    ##### */
 
@@ -742,7 +744,11 @@ textarea::-webkit-scrollbar {
 #viewmore {
   padding: 0.8rem 1.2rem;
   background-color: #837f7f;
-  color: #000;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 1px;
+  border: 2px solid #828282;
+
   border-radius: 50px;
   transition: all 0.3s;
 }
