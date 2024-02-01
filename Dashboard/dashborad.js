@@ -82,7 +82,6 @@ document.getElementById("blog-img").addEventListener("change", function () {
 });
 
 // Function to get user data from the database
-
 const getUserData = async () => {
   try {
     const snapshot = await get(child(dbRef, `UsersUid/${id}`));
@@ -223,66 +222,9 @@ let addData = () => {
 const allBlogsContainer = document.getElementById("articls");
 const recentnotFoundCon = document.getElementById("recent-not-found");
 
-
-const getAllBlogs = async () => {
-  try {
-    const usersSnapshot = await get(child(dbRef, "UsersUid"));
-    let blogsFound = false;
-
-    for (const [userId, user] of Object.entries(usersSnapshot.val())) {
-      const userBlogsRef = ref(db, `BlogData/${userId}`);
-      const userBlogsSnapshot = await get(userBlogsRef);
-
-      if (userBlogsSnapshot.exists()) {
-        for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
-          const blogTimestamp = blogData.timestamp || 0;
-          const currentTimestamp = Date.now();
-          const timeDifference = currentTimestamp - blogTimestamp;
-
-          // Check if the blog is within the last minute
-          const isWithin1Minute = timeDifference <= 60000; // 1 minute in milliseconds
-
-          if (isWithin1Minute) {
-            // Check if the blog has been removed from Realtime Database
-            const removedBlogSnapshot = await get(child(dbRef, `RemovedBlogs/${blogId}`));
-            if (!removedBlogSnapshot.exists()) {
-              // Blog is within 1 minute and not removed, display it
-              const userRef = ref(db, `UsersUid/${userId}`);
-              const userSnapshot = await get(userRef);
-              const userData = userSnapshot.val();
-
-              const publishedDate = blogData.publishDate || "Not Available";
-
-              const blogElement = createBlogElement(
-                blogId,
-                userData,
-                blogData,
-                publishedDate
-              );
-
-              allBlogsContainer.appendChild(blogElement);
-              blogsFound = true;
-            }
-          }
-        }
-      }
-    }
-
-    // Update UI based on blog availability
-    document.getElementById("not-found-text").innerHTML = blogsFound ?
-      `It's been a day since our last post,</br> but fear not!</br> New articles are being brewed. Visit us again for the latest insights.` :
-      `No new articles available.`;
-    recentnotFoundCon.style.display = blogsFound ? "none" : "flex";
-    fullLoader.style.display = "none";
-
-    console.log("Blogs Found:", blogsFound);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
+const getAllBlogs = async () => {};
 
 // Rest of your code remains unchanged
-
 
 const createBlogElement = (blogId, userData, blogData, publishedDate) => {
   const blogElement = document.createElement("article");
