@@ -222,6 +222,7 @@ let addData = () => {
 const allBlogsContainer = document.getElementById("articls");
 const recentnotFoundCon = document.getElementById("recent-not-found");
 
+
 const getAllBlogs = async () => {
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
@@ -240,10 +241,10 @@ const getAllBlogs = async () => {
           const currentTimestamp = Date.now();
           const timeDifference = currentTimestamp - blogTimestamp;
 
-          // Check if the blog is within the last minute
-          const isWithin1Minute = timeDifference <= 10000; // 1 minute in milliseconds
+          // Check if the blog is within the last minute and not already removed
+          const isWithin1Minute = timeDifference <= 60000 && !removedBlogIds.includes(blogId); // 1 minute in milliseconds
 
-          if (isWithin1Minute && !removedBlogIds.includes(blogId)) {
+          if (isWithin1Minute) {
             // Display the blog
             const userRef = ref(db, `UsersUid/${userId}`);
             const userSnapshot = await get(userRef);
@@ -260,11 +261,6 @@ const getAllBlogs = async () => {
 
             allBlogsContainer.appendChild(blogElement);
             blogsFound = true;
-
-            // Set a timeout to remove the blog after 1 minute
-            setTimeout(() => {
-              removeBlog(blogId);
-            }, 10000); // 1 minute in milliseconds
           }
         }
       }
