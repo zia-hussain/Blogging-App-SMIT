@@ -82,6 +82,7 @@ document.getElementById("blog-img").addEventListener("change", function () {
 });
 
 // Function to get user data from the database
+
 const getUserData = async () => {
   try {
     const snapshot = await get(child(dbRef, `UsersUid/${id}`));
@@ -228,9 +229,6 @@ const getAllBlogs = async () => {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
     let blogsFound = false;
 
-    // Get the list of removed blog IDs from local storage
-    const removedBlogIds = JSON.parse(localStorage.getItem("removedBlogIds")) || [];
-
     for (const [userId, user] of Object.entries(usersSnapshot.val())) {
       const userBlogsRef = ref(db, `BlogData/${userId}`);
       const userBlogsSnapshot = await get(userBlogsRef);
@@ -241,26 +239,30 @@ const getAllBlogs = async () => {
           const currentTimestamp = Date.now();
           const timeDifference = currentTimestamp - blogTimestamp;
 
-          // Check if the blog is within the last minute and not already removed
-          const isWithin1Minute = timeDifference <= 60000 && !removedBlogIds.includes(blogId); // 1 minute in milliseconds
+          // Check if the blog is within the last minute
+          const isWithin1Minute = timeDifference <= 60000; // 1 minute in milliseconds
 
           if (isWithin1Minute) {
-            // Display the blog
-            const userRef = ref(db, `UsersUid/${userId}`);
-            const userSnapshot = await get(userRef);
-            const userData = userSnapshot.val();
+            // Check if the blog has been removed from Realtime Database
+            const removedBlogSnapshot = await get(child(dbRef, `RemovedBlogs/${blogId}`));
+            if (!removedBlogSnapshot.exists()) {
+              // Blog is within 1 minute and not removed, display it
+              const userRef = ref(db, `UsersUid/${userId}`);
+              const userSnapshot = await get(userRef);
+              const userData = userSnapshot.val();
 
-            const publishedDate = blogData.publishDate || "Not Available";
+              const publishedDate = blogData.publishDate || "Not Available";
 
-            const blogElement = createBlogElement(
-              blogId,
-              userData,
-              blogData,
-              publishedDate
-            );
+              const blogElement = createBlogElement(
+                blogId,
+                userData,
+                blogData,
+                publishedDate
+              );
 
-            allBlogsContainer.appendChild(blogElement);
-            blogsFound = true;
+              allBlogsContainer.appendChild(blogElement);
+              blogsFound = true;
+            }
           }
         }
       }
