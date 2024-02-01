@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="profile.css" />
   </head>
   <body>
-    <div class="full"></div>
+    <div id="full" class="full"></div>
 
     <div class="popup" id="popup">
       <i onclick="closePopup()" id="close" class="fa-solid fa-times"></i>
@@ -41,7 +41,7 @@
     <!-- Popup for edit btn -->
 
     <div class="e-popup" id="e-popup">
-      <i onclick="closePopup()" id="close" class="fa-solid fa-times"></i>
+      <i  id="close" class="fa-solid fa-times close"></i>
       <h1>Edit Blog</h1>
       <div class="input-field">
         <i class="fa-solid fa-lightbulb"></i>
@@ -84,8 +84,8 @@
       </div>
       
       <div id="btns">
-        <a id="cancel" onclick="closePopup()" href="#">Cancel</a>
-        <a id="delete" href="#">Update</a>
+        <a id="e-cancel" href="#">Cancel</a>
+        <a id="update" href="#">Update</a>
       </div>
     </div>
 

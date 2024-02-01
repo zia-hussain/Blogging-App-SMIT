@@ -42,7 +42,7 @@ a {
   justify-content: center;
   align-items: center;
   background-color: #000;
-  display: none;
+  /* display: none; */
 }
 .newtons-cradle {
   --uib-size: 10px;
@@ -402,7 +402,7 @@ button:hover {
   flex-direction: column;
   color: #fff;
 }
-.e-popup{
+.e-popup {
   height: 87vh;
   width: 550px;
 }
@@ -447,24 +447,31 @@ textarea::-webkit-scrollbar {
 }
 .popup #close,
 .e-popup #close {
-  color: #000;
+  color: #fff;
   font-size: 1.5rem;
   padding: 10px 14px;
-  background-color: #ececec;
+  background: linear-gradient(
+    to bottom left,
+    rgba(0, 0, 0, 0.5),
+    rgba(255, 255, 255, 0.2)
+  );
+  transition: all 1s ease-in-out;
   border-radius: 100%;
   position: absolute;
   top: 5%;
   right: 5%;
   cursor: pointer;
-
-  transition: background-color 0.1s, box-shadow 0.1s;
+  /* transition: background 0.1s ease-in-out; */
 }
 .popup #close:hover,
 .e-popup #close:hover {
-  background-color: #ffffff;
-  box-shadow: 2px 2px 15px 2px rgba(0, 0, 0, 0.65);
+  background: linear-gradient(
+    to top right,
+    rgba(0, 0, 0, 1),
+    rgba(255, 255, 255, 1)
+  );
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.65);
 }
-
 
 .input-field {
   max-width: 380px;
@@ -480,7 +487,7 @@ textarea::-webkit-scrollbar {
   font-size: 1.5rem;
   overflow: hidden;
 }
-.img-input{
+.img-input {
   font-size: 1rem;
 }
 #blog-img {
@@ -557,8 +564,8 @@ textarea::-webkit-scrollbar {
   right: 30px;
   padding: 15px 18px;
   border-radius: 50px;
-  background: #333;
   cursor: pointer;
+  background-color: #333;
   font-size: 20px;
   color: #fff;
 }
@@ -612,17 +619,17 @@ textarea::-webkit-scrollbar {
   height: 100px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   padding-inline: 1rem;
   gap: 1rem;
 }
 #btns a {
   padding: 10px;
-  background-color: #acacac;
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50px;
   padding-block: 1rem;
-  padding-inline: 0.8rem;
-  width: 80%;
+  padding-inline: 1rem;
+  width: max-content;
   text-align: center;
   font-size: 1.5rem;
   text-transform: uppercase;
@@ -630,7 +637,8 @@ textarea::-webkit-scrollbar {
   transition: all 0.1s;
 }
 #btns a:hover {
-  background-color: #837f7f;
+  background-color: rgba(0, 0, 0, 0.7);
+
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.5);
 }
 
@@ -1008,7 +1016,7 @@ textarea::-webkit-scrollbar {
     color: #fff;
     border: 0.5px solid #acacac;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-    /* border-radius: 0px; */
+    text-align: center;
     transition: all 0.3s;
   }
 }
@@ -1217,5 +1225,8 @@ textarea::-webkit-scrollbar {
   .card {
     width: 300px;
     height: 85vh;
+  }
+  #blogBtns{
+    margin-top: 3.5rem;
   }
 }

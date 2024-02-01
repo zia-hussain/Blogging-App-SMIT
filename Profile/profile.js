@@ -270,95 +270,88 @@ async function deleteUserBlogData(userId) {
 
 // Assuming you have a button with id "deleteBtn" in your HTML
 deleteBtn.addEventListener("click", signout);
-
 const allBlogsContainer = document.getElementById("articls");
 const allNotFoundCon = document.getElementById("recent-not-found");
 
-const getAllBlogs = async () => {
+const getAllBlogsForCurrentUser = async (currentUserUid) => {
   try {
-    const usersSnapshot = await get(child(dbRef, "UsersUid"));
+    const userBlogsRef = ref(db, `BlogData/${currentUserUid}`);
+    const userBlogsSnapshot = await get(userBlogsRef);
 
-    let blogsFound = false;
+    if (userBlogsSnapshot.exists()) {
+      for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+        const userRef = ref(db, `UsersUid/${currentUserUid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
 
-    for (const [userId, user] of Object.entries(usersSnapshot.val())) {
-      const userBlogsRef = ref(db, `BlogData/${userId}`);
-      const userBlogsSnapshot = await get(userBlogsRef);
+        const publishedDate = blogData.publishDate || "Not Available";
 
-      if (userBlogsSnapshot.exists()) {
-        for (const [blogId, blogData] of Object.entries(
-          userBlogsSnapshot.val()
-        )) {
-          const userRef = ref(db, `UsersUid/${userId}`);
-          const userSnapshot = await get(userRef);
-          const userData = userSnapshot.val();
-
-          const publishedDate = blogData.publishDate || "Not Available";
-
-          const blogElement = document.createElement("article");
-          blogElement.id = blogId;
-          blogElement.classList.add("article__card", "swiper-slide");
-          blogElement.innerHTML = `
-            <div class="card card1" data-blogid="${blogId}">
-              <div class="container">
-                <img src="${blogData.imgUrl}" alt="Image 1">
-              </div>
-              <div class="details">
-                <span class="postingInfo">
-                  <span class="author">Author: ${userData.nameofuser} </span>
-                  <span class="pb-date">Published on: ${publishedDate}</span>
-                </span>
-                <span id="genre">${blogData.genreofBlog}</span>
-                <h3 id="title">${blogData.titleofBlog}</h3>
-                <p id="desc">${blogData.descofBlog}</p>
-                <div id="blogBtns">
-                  <div class="first-btn">
-                    <a class="btn" id="viewmore" href="/Dashboard/viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
-                  </div>
-                  <div class="second-btn">
-                    <i class="fa-regular fa-trash-can"></i>
-                    <i  class="fa-regular fa-pen-to-square edit"></i>
-                  </div>
+        const blogElement = document.createElement("article");
+        blogElement.id = blogId;
+        blogElement.classList.add("article__card", "swiper-slide");
+        blogElement.innerHTML = `
+          <div class="card card1" data-blogid="${blogId}">
+            <div class="container">
+              <img src="${blogData.imgUrl}" alt="Image 1">
+            </div>
+            <div class="details">
+              <span class="postingInfo">
+                <span class="author">Author: ${userData.nameofuser} </span>
+                <span class="pb-date">Published on: ${publishedDate}</span>
+              </span>
+              <span id="genre">${blogData.genreofBlog}</span>
+              <h3 id="title">${blogData.titleofBlog}</h3>
+              <p id="desc">${blogData.descofBlog}</p>
+              <div id="blogBtns">
+                <div class="first-btn">
+                  <a class="btn" id="viewmore" href="/Dashboard/viewmore.html?blogId=${blogId}&userId=${blogData.createdBy}">View More</a>
+                </div>
+                <div class="second-btn">
+                  <i class="fa-regular fa-trash-can"></i>
+                  <i  class="fa-regular fa-pen-to-square edit"></i>
                 </div>
               </div>
             </div>
-          `;
+          </div>
+        `;
 
-          allBlogsContainer.appendChild(blogElement);
-          const trashIcon = blogElement.querySelector(".fa-trash-can");
-          trashIcon.addEventListener("click", () => delTask(blogId));
-            let editBtn = document.querySelector(".edit");
-            let editPopup = document.getElementById("e-popup");
-            let closeBtn = document.getElementById("close");
-            let cancelBtn = document.getElementById("cancel");
+        allBlogsContainer.appendChild(blogElement);
+        const trashIcon = blogElement.querySelector(".fa-trash-can");
+        trashIcon.addEventListener("click", () => delTask(blogId));
+        let editBtns = document.querySelectorAll(".edit");
+        let editPopup = document.getElementById("e-popup");
+        let closeBtn = document.querySelector(".close");
+        let cancelBtn = document.getElementById("e-cancel");
+        let full = document.querySelector('.full')
         
-            if (editBtn) {
-                editBtn.addEventListener("click", openPopup);
-            }
+        // Loop through each edit button and attach the event listener
+        editBtns.forEach(editBtn => {
+            editBtn.addEventListener("click", openPopup);
+        });
         
-            function openPopup() {
-                editPopup.classList.add("open-popup");
-            }
+        function openPopup() {
+            editPopup.classList.add("open-popup");
+            full.style.display = 'block'
+        }
         
-            function closeEditPopup() {
-                editPopup.classList.remove("open-popup");
-            }
+        function closeEditPopup() {
+            editPopup.classList.remove("open-popup");
+            full.style.display = 'none'
+        }
         
-            if (closeBtn) {
-                closeBtn.addEventListener("click", closeEditPopup);
-            }
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeEditPopup);
+        }
         
-            if (cancelBtn) {
-                cancelBtn.addEventListener("click", closeEditPopup);
-            }
-        
-
-          blogsFound = true;
+        if (cancelBtn) {
+            cancelBtn.addEventListener("click", closeEditPopup);
         }
       }
     }
 
     // Display the notFoundCon only if no blogs are found
-    allNotFoundCon.style.display = blogsFound ? "none" : "flex";
+    allNotFoundCon.style.display = userBlogsSnapshot.exists() ? "none" : "flex";
+    document.getElementById('not-found-text').innerText = `You haven't posted any blogs yet.`
 
     // Hide full loader regardless of blogs found or not
     fullLoader.style.display = "none";
@@ -367,9 +360,22 @@ const getAllBlogs = async () => {
     // Handle errors if needed
   }
 };
+
 window.addEventListener("load", () => {
-  getAllBlogs();
+  // Listen for authentication state changes
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // The user is signed in
+      const currentUserUid = user.uid;
+      // Now you can use currentUserUid to fetch the blogs for the current user
+      getAllBlogsForCurrentUser(currentUserUid);
+    } else {
+      // No user is signed in
+      alert('no user available');
+    }
+  });
 });
+
 
 //  for deleting blogs
 function delTask(blogId) {
