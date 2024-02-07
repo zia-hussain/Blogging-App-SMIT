@@ -291,8 +291,8 @@ const getAllBlogsForCurrentUser = async (currentUserUid) => {
         const blogElement = document.createElement("article");
         blogElement.id = blogId;
         blogElement.classList.add("article__card", "swiper-slide");
-        blogElement.innerHTML = `
-          <div class="card card1" data-blogid="${blogId}">
+        blogElement.innerHTML = ` 
+          <div class="card card1" data-blogid="${blogId}" >
             <div class="container">
               <img src="${blogData.imgUrl}" alt="Image 1">
             </div>
@@ -310,7 +310,7 @@ const getAllBlogsForCurrentUser = async (currentUserUid) => {
                 </div>
                 <div class="second-btn">
                   <i class="fa-regular fa-trash-can"></i>
-                  <i  class="fa-regular fa-pen-to-square edit"></i>
+                  <i  class="fa-regular fa-pen-to-square edit" id=${blogId}></i>
                 </div>
               </div>
             </div>
@@ -334,6 +334,13 @@ const getAllBlogsForCurrentUser = async (currentUserUid) => {
         function openPopup() {
           editPopup.classList.add("open-popup");
           full.style.display = "block";
+          const blogId = event.target.id;
+          console.log("blogId", blogId);
+          const blogsRef = firebase.database().ref("blogs");
+          blogsRef.child(blogId).once("value", function (snapshot) {
+            const blogData = snapshot.val();
+            console.log("blogData", blogData);
+          });
         }
 
         function closeEditPopup() {
@@ -428,10 +435,13 @@ document.getElementById("update").addEventListener("click", function (event) {
 document.getElementById("articls").addEventListener("click", function (event) {
   const clickedElement = event.target.closest(".article__card");
   if (clickedElement) {
-    console.log("Clicked Element:", clickedElement);
     const blogId = clickedElement.dataset.id;
-    console.log("blogId:", blogId);
-    editBlog(blogId);
+    const blogsRef =  database().ref("blogs");
+    blogsRef.child(blogId).once("value", function (snapshot) {
+      const blogData = snapshot.val();
+      // Do something with the fetched blog data
+      console.log(blogData);
+    });
   }
 });
 
@@ -439,7 +449,7 @@ async function editBlog(blogId) {
   try {
     // Retrieve the blog post data from the database
     const blogRef = ref(db, `BlogData/${id}/${blogId}`);
-    console.log(blogRef);
+    console.log("ref", blogRef);
 
     const blogSnapshot = await get(blogRef);
     const blogData = blogSnapshot.val();
