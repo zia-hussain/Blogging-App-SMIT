@@ -279,7 +279,9 @@ const getAllBlogsForCurrentUser = async (currentUserUid) => {
     const userBlogsSnapshot = await get(userBlogsRef);
 
     if (userBlogsSnapshot.exists()) {
-      for (const [blogId, blogData] of Object.entries(userBlogsSnapshot.val())) {
+      for (const [blogId, blogData] of Object.entries(
+        userBlogsSnapshot.val()
+      )) {
         const userRef = ref(db, `UsersUid/${currentUserUid}`);
         const userSnapshot = await get(userRef);
         const userData = userSnapshot.val();
@@ -322,36 +324,38 @@ const getAllBlogsForCurrentUser = async (currentUserUid) => {
         let editPopup = document.getElementById("e-popup");
         let closeBtn = document.querySelector(".close");
         let cancelBtn = document.getElementById("e-cancel");
-        let full = document.querySelector('.full')
-        
+        let full = document.querySelector(".full");
+
         // Loop through each edit button and attach the event listener
-        editBtns.forEach(editBtn => {
-            editBtn.addEventListener("click", openPopup);
+        editBtns.forEach((editBtn) => {
+          editBtn.addEventListener("click", openPopup);
         });
-        
+
         function openPopup() {
-            editPopup.classList.add("open-popup");
-            full.style.display = 'block'
+          editPopup.classList.add("open-popup");
+          full.style.display = "block";
         }
-        
+
         function closeEditPopup() {
-            editPopup.classList.remove("open-popup");
-            full.style.display = 'none'
+          editPopup.classList.remove("open-popup");
+          full.style.display = "none";
         }
-        
+
         if (closeBtn) {
-            closeBtn.addEventListener("click", closeEditPopup);
+          closeBtn.addEventListener("click", closeEditPopup);
         }
-        
+
         if (cancelBtn) {
-            cancelBtn.addEventListener("click", closeEditPopup);
+          cancelBtn.addEventListener("click", closeEditPopup);
         }
       }
     }
 
     // Display the notFoundCon only if no blogs are found
     allNotFoundCon.style.display = userBlogsSnapshot.exists() ? "none" : "flex";
-    document.getElementById('not-found-text').innerText = `You haven't posted any blogs yet.`
+    document.getElementById(
+      "not-found-text"
+    ).innerText = `You haven't posted any blogs yet.`;
 
     // Hide full loader regardless of blogs found or not
     fullLoader.style.display = "none";
@@ -371,11 +375,10 @@ window.addEventListener("load", () => {
       getAllBlogsForCurrentUser(currentUserUid);
     } else {
       // No user is signed in
-      alert('no user available');
+      alert("no user available");
     }
   });
 });
-
 
 //  for deleting blogs
 function delTask(blogId) {
@@ -411,10 +414,77 @@ function delTask(blogId) {
 
 // for edit blogs data
 
+// Event listener for the "Update" button
+document.getElementById("update").addEventListener("click", function (event) {
+  event.preventDefault();
+  if (event.target && event.target.matches(".article__card")) {
+    console.log(event.target);
+    const blogId = event.target.dataset.blogid;
+    console.log("blogId:", blogId); // Log the value of blogId
+    editBlog(blogId);
+  }
+});
 
+document.getElementById("articls").addEventListener("click", function (event) {
+  const clickedElement = event.target.closest(".article__card");
+  if (clickedElement) {
+    console.log("Clicked Element:", clickedElement);
+    const blogId = clickedElement.dataset.id;
+    console.log("blogId:", blogId);
+    editBlog(blogId);
+  }
+});
 
-// for showing img in input file 
+async function editBlog(blogId) {
+  try {
+    // Retrieve the blog post data from the database
+    const blogRef = ref(db, `BlogData/${id}/${blogId}`);
+    console.log(blogRef);
 
+    const blogSnapshot = await get(blogRef);
+    const blogData = blogSnapshot.val();
+
+    // Access UI elements to update blog post details
+    let editTitle = document.getElementById("title");
+    let editTitleinp = document.getElementById("titleinp");
+    let editBlogImg = document.getElementById("blog-img");
+    let editDesc = document.getElementById("desc");
+
+    if (blogData) {
+      // Update UI with the current blog post data
+      console.log(blogData);
+      editTitle.value = blogData.title || "";
+      editTitleinp.value = blogData.title || "";
+      // Assuming the blog image is stored in blogData.imgUrl
+      editBlogImg.src = blogData.imgUrl || "";
+      editDesc.value = blogData.description || "";
+
+      // Add event listener to handle update button click
+      document
+        .getElementById("updateBtn")
+        .addEventListener("click", async function (event) {
+          event.preventDefault();
+          // Update the blog post data in the database
+          await updateBlogPost(blogId, {
+            title: editTitle.value,
+            // You may need to handle image updates separately if allowed
+            description: editDesc.value,
+          });
+
+          // Inform the user that the blog post was updated successfully
+          alert("Blog post updated successfully!");
+        });
+    } else {
+      console.log("Blog data not found.");
+      // Handle the case where blogData is null, such as displaying an error message to the user.
+    }
+  } catch (error) {
+    console.error("Error editing blog post:", error);
+    alert("Error editing blog post. Please try again.");
+  }
+}
+
+// for showing img in input file
 document.getElementById("blog-img").addEventListener("change", function () {
   var input = this;
   var label = input.nextElementSibling;
@@ -450,4 +520,3 @@ document.getElementById("blog-img").addEventListener("change", function () {
     viewIcon.style.display = "none";
   }
 });
-

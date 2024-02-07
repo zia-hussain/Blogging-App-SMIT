@@ -224,7 +224,7 @@ const allBlogsContainer = document.getElementById("articls");
 const recentnotFoundCon = document.getElementById("recent-not-found");
 const getAllBlogs = async () => {
   // Assuming postTime is the time the post was created in milliseconds
-  
+
   try {
     const usersSnapshot = await get(child(dbRef, "UsersUid"));
     let blogsFound = false;
@@ -258,7 +258,7 @@ const getAllBlogs = async () => {
 
             const publishedDate = blogData.publishDate || "Not Available";
 
-            const blogElement = createBlogElement(  
+            const blogElement = createBlogElement(
               blogId,
               userData,
               blogData,

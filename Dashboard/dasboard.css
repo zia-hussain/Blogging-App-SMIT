@@ -245,7 +245,6 @@ button {
   transition: all 0.1s ease-in;
   display: none;
   border: 2px double #acacac;
-
 }
 button:hover {
   background: rgba(0, 0, 0, 0.1);
@@ -743,8 +742,8 @@ textarea::-webkit-scrollbar {
 }
 #viewmore {
   padding: 0.8rem 1.2rem;
-  background-color: #837f7f;
-  color: #fff;
+  background-color: #212121;
+  color: #acacac;
   font-weight: 800;
   letter-spacing: 1px;
   border: 2px solid #828282;
